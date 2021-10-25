@@ -15,15 +15,20 @@ public class TextObserver implements Observer{
         this.textArea = textArea;
         this.totalTextNum = text;
     }
+
+    // subscribe textLength
     public void subscribe(Observable text) {
         this.text = text;
         text.register(this);
     }
+
+    // unsubscribe textLength
     @Override
     public void unsubscribe() {
         text.unregister(this);
     }
 
+    // update the total word
     @Override
     public void update() {
         totalTextNum.setText("Total "+textArea.getLength()+" Word");

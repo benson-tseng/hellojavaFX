@@ -11,6 +11,8 @@ public class HelloApplication extends Application {
     private FXMLLoader fxmlLoader;
     @Override
     public void start(Stage stage) throws IOException {
+
+        // singleton pattern
         if(fxmlLoader == null){
             synchronized (FXMLLoader.class){
                 if(fxmlLoader == null){
@@ -18,6 +20,7 @@ public class HelloApplication extends Application {
                 }
             }
         }
+
         Scene scene = new Scene(fxmlLoader.load());
         stage.setTitle("Hello!");
         stage.setScene(scene);

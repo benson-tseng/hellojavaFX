@@ -29,6 +29,7 @@ import java.util.stream.Stream;
 
 
 public class HelloController {
+    // document edit method
     private Meth meth;
     private Scene scene;
     private IntSet intSet;
@@ -57,6 +58,7 @@ public class HelloController {
         setListener();
     }
 
+    // count total text method
     public void totalText(){
         TextLength textLength = new TextLength();
         TextObserver viewer = new TextObserver("viewer",textArea,totalTextNum);
@@ -66,6 +68,7 @@ public class HelloController {
         });
     }
 
+    // set menu's option select listener
     public void setListener(){
         chooseWord.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
@@ -75,6 +78,7 @@ public class HelloController {
         });
     }
 
+    // search word method
     public void searchWord(){
         StringBuffer sb = new StringBuffer(textArea.getText());
         this.intSet = new IntSet(1000);
@@ -94,25 +98,30 @@ public class HelloController {
         resultNum.setText(countResult + " Record");
     }
 
+    // set scene which passed by Application
     public void setScene(Scene scene){
         this.scene = scene;
     }
 
+    // use edit as Document file
     public void setDocMeth(){
         chooseMeth(new DocMeth());
         useMeth("Doc Edit Mode");
     }
 
+    // use edit as Code file
     public void setCodeMeth(){
         chooseMeth(new CodeMeth());
         useMeth("Code Edit Mode");
     }
 
+    // use edit as Html file
     public void setHtmlMeth(){
         chooseMeth(new HtmlMeth());
         useMeth("Html Edit Mode");
     }
 
+    // init method & set current edit method
     public void useMeth(String s){
         if(meth == null){
             meth = new DocMeth();
@@ -121,10 +130,12 @@ public class HelloController {
         useMeth.setText(s);
     }
 
+    // switch current method
     public void chooseMeth(Meth meth){
         this.meth = meth;
     }
 
+    // save file method
     @FXML
     public void save() {
         FileChooser chooser = new FileChooser();
@@ -145,6 +156,7 @@ public class HelloController {
         outFile.close();
     }
 
+    // open file method
     public void openFile() {
         FileChooser fileChooser = new FileChooser();
 
