@@ -24,6 +24,7 @@ public class HelloApplication extends Application {
         stage.show();
         HelloController controller = fxmlLoader.getController();
         controller.setScene(scene);
+        controller.totalText();
     }
 
     public static void main(String[] args) {

@@ -49,8 +49,16 @@
                 <Insets left="10.0" right="10.0" />
             </VBox.margin>
             <ComboBox fx:id="chooseWord" maxHeight="200"></ComboBox>
-            <Text fx:id="resultNum">Total 0 result</Text>
+            <Text fx:id="resultNum">0 Record</Text>
+            <Pane HBox.hgrow="ALWAYS" />
         </HBox>
         <TextArea fx:id="textArea" prefHeight="600.0" />
+        <HBox spacing="30">
+            <VBox.margin>
+                <Insets left="10.0" right="10.0" />
+            </VBox.margin>
+            <Pane HBox.hgrow="ALWAYS" />
+            <Text fx:id="totalTextNum">Total 0 Word</Text>
+        </HBox>
     </children>
 </VBox>

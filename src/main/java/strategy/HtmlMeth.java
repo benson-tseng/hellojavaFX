@@ -8,7 +8,6 @@ import javafx.scene.input.KeyEvent;
 public class HtmlMeth implements Meth{
     @Override
     public void editMeth(Scene scene, TextArea textArea) {
-        System.out.println("html edit");
         scene.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
             int curPosi = textArea.getCaretPosition();
             StringBuffer sb = new StringBuffer(textArea.getText());

@@ -7,7 +7,6 @@ import javafx.scene.input.KeyEvent;
 
 public class CodeMeth implements Meth{
     public void editMeth(Scene scene, TextArea textArea){
-        System.out.println("code edit mode");
         scene.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
             int curPosi = textArea.getCaretPosition();
             StringBuffer sb = new StringBuffer(textArea.getText());

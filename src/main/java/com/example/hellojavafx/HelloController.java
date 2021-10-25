@@ -7,17 +7,16 @@ import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.ChoiceBox;
 import javafx.scene.control.ComboBox;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
-import javafx.scene.input.KeyCode;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.scene.web.HTMLEditor;
 import javafx.stage.FileChooser;
+import observer.TextLength;
+import observer.TextObserver;
 import strategy.CodeMeth;
 import strategy.DocMeth;
 import strategy.HtmlMeth;
@@ -42,21 +41,35 @@ public class HelloController {
 
     @FXML
     private Text useMeth,
-    resultNum;
+    resultNum,
+    totalTextNum;
 
     @FXML
     private ComboBox chooseWord;
 
     public void initialize() {
         textArea.setWrapText(true);
-        useMeth.setText("doc edit mode");
+        useMeth.setText("Doc Edit Mode");
         useMeth.setFont(Font.font(null, FontWeight.BLACK, 15));
         resultNum.setFont(Font.font(null, FontWeight.LIGHT, 15));
+        totalTextNum.setFont(Font.font(null, FontWeight.BLACK, 15));
         chooseWord.setVisibleRowCount(5);
+        setListener();
+    }
+
+    public void totalText(){
+        TextLength textLength = new TextLength();
+        TextObserver viewer = new TextObserver("viewer",textArea,totalTextNum);
+        viewer.subscribe(textLength);
+        this.scene.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+            textLength.inform();
+        });
+    }
+
+    public void setListener(){
         chooseWord.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-//                textArea.selectRange(Integer.valueOf(((String)chooseWord.getItems().get((Integer)number2)).substring(7,((String)chooseWord.getItems().get((Integer)number2)).length())),Integer.valueOf(((String)chooseWord.getItems().get((Integer)number2)).substring(7,((String)chooseWord.getItems().get((Integer)number2)).length()))+searchKeyWord.getLength());
                 textArea.selectRange(intSet.getIntAt((Integer) number2),intSet.getIntAt((Integer) number2)+searchKeyWord.getLength());
             }
         });
@@ -78,7 +91,7 @@ public class HelloController {
             int i = (int)it.next();
             chooseWord.getItems().add("Record "+countResult);
         }
-        resultNum.setText("total "+ countResult + " result");
+        resultNum.setText(countResult + " Record");
     }
 
     public void setScene(Scene scene){
@@ -87,17 +100,17 @@ public class HelloController {
 
     public void setDocMeth(){
         chooseMeth(new DocMeth());
-        useMeth("doc edit mode");
+        useMeth("Doc Edit Mode");
     }
 
     public void setCodeMeth(){
         chooseMeth(new CodeMeth());
-        useMeth("code edit mode");
+        useMeth("Code Edit Mode");
     }
 
     public void setHtmlMeth(){
         chooseMeth(new HtmlMeth());
-        useMeth("html edit mode");
+        useMeth("Html Edit Mode");
     }
 
     public void useMeth(String s){
