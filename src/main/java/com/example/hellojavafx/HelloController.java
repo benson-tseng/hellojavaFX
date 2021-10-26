@@ -53,6 +53,11 @@ public class HelloController {
     @FXML
     private ComboBox chooseWord;
 
+    CommandInvoker cmdInvoker;
+    Originator originator;
+    Caretaker caretaker;
+    Memento m;
+
     public void initialize() {
         textArea.setWrapText(true);
         useMeth.setText("Doc Edit Mode");
