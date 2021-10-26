@@ -21,6 +21,11 @@ import strategy.CodeMeth;
 import strategy.DocMeth;
 import strategy.HtmlMeth;
 import strategy.Meth;
+import Command.CommandInvoker;
+import Command.DeleteCommand;
+import Memento.Caretaker;
+import Memento.Memento;
+import Memento.Originator;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -55,6 +60,12 @@ public class HelloController {
         resultNum.setFont(Font.font(null, FontWeight.LIGHT, 15));
         totalTextNum.setFont(Font.font(null, FontWeight.BLACK, 15));
         chooseWord.setVisibleRowCount(5);
+        cmdInvoker = new CommandInvoker();
+        originator = new Originator();
+        caretaker = new Caretaker();
+        originator.setText(textArea.getText());
+        m = originator.snapshot();
+        caretaker.addMemento(m);
         setListener();
     }
 
@@ -225,6 +236,36 @@ public class HelloController {
 
         return loadFileTask;
     }
+
+    public void onDelete(){
+        DeleteCommand del = new DeleteCommand(textArea);
+        cmdInvoker.execute(del);
+    }
+
+    public void undo(){
+        cmdInvoker.undo();
+    }
+
+    public void redo(){
+        cmdInvoker.redo();
+    }
+
+    public void saveVersion(){
+        originator.setText(textArea.getText());
+        m = originator.snapshot();
+        caretaker.addMemento(m);
+    }
+
+    public void onPrevious(){
+        originator.restore(caretaker.undo());
+        textArea.setText(originator.getText());
+    }
+
+    public void onNext(){
+        originator.restore(caretaker.redo());
+        textArea.setText(originator.getText());
+    }
+    
 }
 
 // timer example
