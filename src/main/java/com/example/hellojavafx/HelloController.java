@@ -5,12 +5,14 @@ import interator.Iterator;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
+import javafx.scene.input.Clipboard;
+import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -23,9 +25,14 @@ import strategy.HtmlMeth;
 import strategy.Meth;
 import Command.CommandInvoker;
 import Command.DeleteCommand;
+import Command.CopyCommand;
+import Command.PasteCommand;
 import Memento.Caretaker;
 import Memento.Memento;
 import Memento.Originator;
+import State.ReadState;
+import State.EditState;
+import State.Context;
 
 import java.io.*;
 import java.nio.file.Files;
@@ -40,10 +47,25 @@ public class HelloController {
     private IntSet intSet;
 
     @FXML
+    private Menu EditMethod;
+
+    @FXML
+    private Menu TextEdit;
+
+    @FXML
+    private Menu Version;
+
+    @FXML
     private TextField searchKeyWord;
 
     @FXML
     private TextArea textArea;
+
+    @FXML
+    private ToggleButton buttonEditor;
+
+    @FXML
+    private ToggleButton buttonReader;
 
     @FXML
     private Text useMeth,
@@ -53,10 +75,23 @@ public class HelloController {
     @FXML
     private ComboBox chooseWord;
 
+    // Position in TextArea;
+    private int curPosi;
+
+    // CommandInvoker use to invoke command;
     CommandInvoker cmdInvoker;
+
+    // Memento participant
     Originator originator;
     Caretaker caretaker;
     Memento m;
+
+    // An outwindow
+    Context context;
+
+    // Copy & Paste need to use
+    final Clipboard clipboard = Clipboard.getSystemClipboard();;
+    final ClipboardContent content = new ClipboardContent();
 
     public void initialize() {
         textArea.setWrapText(true);
@@ -71,6 +106,7 @@ public class HelloController {
         originator.setText(textArea.getText());
         m = originator.snapshot();
         caretaker.addMemento(m);
+        context = new Context();
         setListener();
     }
 
@@ -117,6 +153,16 @@ public class HelloController {
     // set scene which passed by Application
     public void setScene(Scene scene){
         this.scene = scene;
+        //Listen the keyboard event
+        scene.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+            curPosi = textArea.getCaretPosition();
+            System.out.println(curPosi);
+        });
+        //Listen the mouse event
+        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
+            curPosi = textArea.getCaretPosition();
+            System.out.println(curPosi);
+        });
     }
 
     // use edit as Document file
@@ -242,33 +288,70 @@ public class HelloController {
         return loadFileTask;
     }
 
+    public void onCopy(){
+        CopyCommand cop = new CopyCommand(textArea,clipboard,content,curPosi);
+        cmdInvoker.execute(cop);
+
+    }
+
+    // Do PasteCommand
+    public void onPaste(){
+        PasteCommand pas = new PasteCommand(textArea,clipboard,curPosi);
+        cmdInvoker.execute(pas);
+    }
+
+    // Do DeleteCommand
     public void onDelete(){
-        DeleteCommand del = new DeleteCommand(textArea);
+        DeleteCommand del = new DeleteCommand(textArea,curPosi);
         cmdInvoker.execute(del);
     }
 
+    // Back to before the last Command execute or Cancel Redo
     public void undo(){
         cmdInvoker.undo();
     }
 
+    // Cancel Undo
     public void redo(){
         cmdInvoker.redo();
     }
 
+    // Save Version
     public void saveVersion(){
         originator.setText(textArea.getText());
         m = originator.snapshot();
         caretaker.addMemento(m);
     }
 
+    // Back to Previous Version
     public void onPrevious(){
         originator.restore(caretaker.undo());
         textArea.setText(originator.getText());
     }
 
+    // Cancel Back to Previous Version
     public void onNext(){
         originator.restore(caretaker.redo());
         textArea.setText(originator.getText());
+    }
+
+    // Change to Editor or Reader
+    public void toggleButton(ActionEvent actionEvent){
+        if (actionEvent.getSource() == buttonEditor) {
+            EditState editState = new EditState();
+            editState.doAction(context);
+            textArea.setEditable(context.getState().canUse());
+            EditMethod.setVisible(context.getState().canUse());
+            TextEdit.setVisible(context.getState().canUse());
+            Version.setVisible(context.getState().canUse());
+        } else if (actionEvent.getSource() == buttonReader) {
+            ReadState readState = new ReadState();
+            readState.doAction(context);
+            textArea.setEditable(context.getState().canUse());
+            EditMethod.setVisible(context.getState().canUse());
+            TextEdit.setVisible(context.getState().canUse());
+            Version.setVisible(context.getState().canUse());
+        }
     }
     
 }

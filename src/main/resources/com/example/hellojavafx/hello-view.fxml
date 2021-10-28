@@ -14,6 +14,8 @@
 <?import javafx.scene.layout.Pane?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.ToggleButton?>
+<?import javafx.scene.control.ToggleGroup?>
 <VBox fx:id="vBox" prefHeight="700.0" prefWidth="1000" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellojavafx.HelloController">
     <children>
         <MenuBar fx:id="menuBar">
@@ -26,21 +28,23 @@
                         <MenuItem fx:id="open_file" text="open file" onAction="#openFile" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Edit Method">
+                <Menu fx:id="EditMethod" mnemonicParsing="false" text="Edit Method">
                     <items>
                         <MenuItem fx:id="docEdit" text="docEdit" onAction="#setDocMeth" />
                         <MenuItem fx:id="codeEdit" mnemonicParsing="false" text="codeEdit" onAction="#setCodeMeth" />
                         <MenuItem fx:id="htmlEdit" text="htmlEdit" onAction="#setHtmlMeth" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="TextEdit">
+                <Menu fx:id="TextEdit" mnemonicParsing="false" text="TextEdit">
                     <items>
-                        <MenuItem fx:id="Delete1" mnemonicParsing="false" onAction="#onDelete" text="Delete" />
+                        <MenuItem fx:id="Delete" mnemonicParsing="false" onAction="#onDelete" text="Delete" />
+                        <MenuItem fx:id="Copy" mnemonicParsing="false" onAction="#onCopy" text="Copy" />
+                        <MenuItem fx:id="Paste" mnemonicParsing="false" onAction="#onPaste" text="Paste" />
                         <MenuItem fx:id="undo" mnemonicParsing="false" onAction="#undo" text="Undo" />
                         <MenuItem fx:id="redo" mnemonicParsing="false" onAction="#redo" text="Redo" />
                     </items>
                 </Menu>
-                <Menu mnemonicParsing="false" text="Version">
+                <Menu fx:id="Version" mnemonicParsing="false" text="Version">
                     <items>
                         <MenuItem fx:id="SaveVersion" mnemonicParsing="false" onAction="#saveVersion" text="SaveVersion" />
                         <MenuItem fx:id="Previous" mnemonicParsing="false" onAction="#onPrevious" text="Previous" />
@@ -55,7 +59,14 @@
             </VBox.margin>
             <TextField fx:id="searchKeyWord"></TextField>
             <Button fx:id="search" text="Search" onAction="#searchWord"></Button>
-            <Pane HBox.hgrow="ALWAYS" />
+            <Pane HBox.hgrow="ALWAYS"><children>
+            <ToggleButton fx:id="buttonEditor" layoutX="68.0" mnemonicParsing="false" onAction="#toggleButton" text="Editor">
+                <toggleGroup>
+                    <ToggleGroup fx:id="buttons" />
+                </toggleGroup>
+            </ToggleButton>
+            <ToggleButton fx:id="buttonReader" layoutX="118.0" mnemonicParsing="false" onAction="#toggleButton" text="Reader" toggleGroup="$buttons" />
+        </children></Pane>
             <Text fx:id="useMeth"  />
         </HBox>
         <HBox spacing="30">
