@@ -20,9 +20,9 @@
     <children>
         <MenuBar fx:id="menuBar">
             <menus>
-                <Menu mnemonicParsing="false" text="File">
+                <Menu fx:id="File" mnemonicParsing="false" text="File">
                     <items>
-                        <MenuItem mnemonicParsing="false" text="Close" />
+                        <MenuItem fx:id="fileClose" mnemonicParsing="false" text="Close" />
                         <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="menuItem_xml" mnemonicParsing="false" text="Save file" onAction="#save" />
                         <MenuItem fx:id="open_file" text="open file" onAction="#openFile" />
@@ -47,6 +47,7 @@
                 <Menu fx:id="Version" mnemonicParsing="false" text="Version">
                     <items>
                         <MenuItem fx:id="SaveVersion" mnemonicParsing="false" onAction="#saveVersion" text="SaveVersion" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
                         <MenuItem fx:id="Previous" mnemonicParsing="false" onAction="#onPrevious" text="Previous" />
                         <MenuItem fx:id="Next" mnemonicParsing="false" onAction="#onNext" text="Next" />
                     </items>

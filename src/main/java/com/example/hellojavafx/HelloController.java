@@ -1,5 +1,9 @@
 package com.example.hellojavafx;
 
+import builder.Director;
+import builder.EditBuilder;
+import builder.MenuBarBuilder;
+import builder.ReadOnlyBuilder;
 import interator.IntSet;
 import interator.Iterator;
 import javafx.beans.value.ChangeListener;
@@ -11,8 +15,10 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
+import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
+import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -79,6 +85,9 @@ public class HelloController {
     private int curPosi;
 
     // CommandInvoker use to invoke command;
+    @FXML
+    private MenuBar menuBar;
+
     CommandInvoker cmdInvoker;
 
     // Memento participant
@@ -93,7 +102,7 @@ public class HelloController {
     final Clipboard clipboard = Clipboard.getSystemClipboard();;
     final ClipboardContent content = new ClipboardContent();
 
-    public void initialize() {
+    public void initialize() throws NoSuchMethodException {
         textArea.setWrapText(true);
         useMeth.setText("Doc Edit Mode");
         useMeth.setFont(Font.font(null, FontWeight.BLACK, 15));
@@ -108,6 +117,22 @@ public class HelloController {
         caretaker.addMemento(m);
         context = new Context();
         setListener();
+        test();
+    }
+
+    //test
+    public void test() throws NoSuchMethodException {
+        Director director = new Director();
+        MenuBarBuilder readonlyBuilder = new ReadOnlyBuilder();
+        MenuBarBuilder edit = new EditBuilder();
+
+        director.setMenuBarBuilder(edit);
+        director.constructMenuBar();
+
+        menuBar.getMenus().add(director.getMenuBar().getMenus().get(0));
+        menuBar.getMenus().add(director.getMenuBar().getMenus().get(1));
+        menuBar.getMenus().add(director.getMenuBar().getMenus().get(2));
+        menuBar.getMenus().add(director.getMenuBar().getMenus().get(3));
     }
 
     // count total text method
@@ -156,12 +181,10 @@ public class HelloController {
         //Listen the keyboard event
         scene.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
             curPosi = textArea.getCaretPosition();
-            System.out.println(curPosi);
         });
         //Listen the mouse event
         scene.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
             curPosi = textArea.getCaretPosition();
-            System.out.println(curPosi);
         });
     }
 
@@ -203,9 +226,10 @@ public class HelloController {
         FileChooser chooser = new FileChooser();
         chooser.setTitle("Choose location To Save Report");
         File selectedFile = null;
-        while(selectedFile== null){
-            selectedFile = chooser.showSaveDialog(null);
-        }
+        selectedFile = chooser.showSaveDialog(null);
+//        while(selectedFile== null){
+//            selectedFile = chooser.showSaveDialog(null);
+//        }
 
         File file = new File(String.valueOf(selectedFile));
         PrintWriter outFile = null;
@@ -353,7 +377,7 @@ public class HelloController {
             Version.setVisible(context.getState().canUse());
         }
     }
-    
+
 }
 
 // timer example
