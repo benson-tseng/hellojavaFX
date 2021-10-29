@@ -15,6 +15,7 @@ public class CommandInvoker {
 
     public void execute(Command cmd) {
         cmd.execute();
+        System.out.println(UndoStack);
         if (cmd.isReversible()) {
             UndoStack.push(cmd);
         }

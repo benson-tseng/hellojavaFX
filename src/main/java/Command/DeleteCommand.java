@@ -22,7 +22,6 @@ public class DeleteCommand implements Command{
     public void execute(){
         tems = textArea.getText();
         deleteIndex = textArea.getLength() - 1;
-
         if (deleteIndex >= 0) {
             textArea.setText(tems.substring(0,deleteIndex));//Retain text before the deleted char
         }
@@ -31,9 +30,10 @@ public class DeleteCommand implements Command{
 
     public void undo(){
         if (deleteIndex >= 0) {
-            textArea.setText(tems);
+            ;
         }
-        textArea.positionCaret(curPosi );
+        textArea.setText(tems);
+        textArea.positionCaret(curPosi);
     }
 
     public boolean isReversible(){

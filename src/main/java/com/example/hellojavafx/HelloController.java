@@ -10,6 +10,7 @@ import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
+import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.scene.Scene;
 import javafx.scene.control.*;
@@ -51,6 +52,11 @@ public class HelloController {
     private Meth meth;
     private Scene scene;
     private IntSet intSet;
+
+    private Menu MFile;
+    private Menu MEditMethod;
+    private Menu MTextEdit;
+    private Menu MVersion;
 
     @FXML
     private Menu EditMethod;
@@ -120,11 +126,22 @@ public class HelloController {
         test();
     }
 
+    public TextArea getTextArea(){
+        return textArea;
+    }
+
+    public CommandInvoker getCmdInvoker(){
+        return cmdInvoker;
+    }
+
     //test
     public void test() throws NoSuchMethodException {
         Director director = new Director();
-        MenuBarBuilder readonlyBuilder = new ReadOnlyBuilder();
-        MenuBarBuilder edit = new EditBuilder();
+        Combine combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
+
+        MenuBarBuilder readonlyBuilder = new ReadOnlyBuilder(combine);
+        MenuBarBuilder edit = new EditBuilder(combine);
+
 
         director.setMenuBarBuilder(edit);
         director.constructMenuBar();
@@ -133,6 +150,32 @@ public class HelloController {
         menuBar.getMenus().add(director.getMenuBar().getMenus().get(1));
         menuBar.getMenus().add(director.getMenuBar().getMenus().get(2));
         menuBar.getMenus().add(director.getMenuBar().getMenus().get(3));
+
+        MFile = menuBar.getMenus().get(4);
+        MEditMethod = menuBar.getMenus().get(5);
+        MTextEdit = menuBar.getMenus().get(6);
+        MVersion = menuBar.getMenus().get(7);
+
+        MEditMethod.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                setDocMeth();
+            }
+        });
+
+        MEditMethod.getItems().get(1).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                setCodeMeth();
+            }
+        });
+
+        MEditMethod.getItems().get(2).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                setHtmlMeth();
+            }
+        });
     }
 
     // count total text method
@@ -368,6 +411,9 @@ public class HelloController {
             EditMethod.setVisible(context.getState().canUse());
             TextEdit.setVisible(context.getState().canUse());
             Version.setVisible(context.getState().canUse());
+            MEditMethod.setVisible(context.getState().canUse());
+            MTextEdit.setVisible(context.getState().canUse());
+            MVersion.setVisible(context.getState().canUse());
         } else if (actionEvent.getSource() == buttonReader) {
             ReadState readState = new ReadState();
             readState.doAction(context);
@@ -375,6 +421,9 @@ public class HelloController {
             EditMethod.setVisible(context.getState().canUse());
             TextEdit.setVisible(context.getState().canUse());
             Version.setVisible(context.getState().canUse());
+            MEditMethod.setVisible(context.getState().canUse());
+            MTextEdit.setVisible(context.getState().canUse());
+            MVersion.setVisible(context.getState().canUse());
         }
     }
 
