@@ -19,48 +19,6 @@
 <VBox fx:id="vBox" prefHeight="700.0" prefWidth="1000" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellojavafx.HelloController">
     <children>
         <MenuBar fx:id="menuBar">
-            <menus>
-                <Menu fx:id="File" mnemonicParsing="false" text="File">
-                    <items>
-                        <MenuItem fx:id="fileClose" mnemonicParsing="false" text="Close" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="menuItem_xml" mnemonicParsing="false" text="Save file" onAction="#save" />
-                        <MenuItem fx:id="open_file" text="open file" onAction="#openFile" />
-                    </items>
-                </Menu>
-                <Menu fx:id="EditMethod" mnemonicParsing="false" text="Edit Method">
-                    <items>
-                        <MenuItem fx:id="docEdit" text="docEdit" onAction="#setDocMeth" />
-                        <MenuItem fx:id="codeEdit" mnemonicParsing="false" text="codeEdit" onAction="#setCodeMeth" />
-                        <MenuItem fx:id="htmlEdit" text="htmlEdit" onAction="#setHtmlMeth" />
-                    </items>
-                </Menu>
-                <Menu fx:id="TextEdit" mnemonicParsing="false" text="TextEdit">
-                    <items>
-                        <MenuItem fx:id="Delete" mnemonicParsing="false" onAction="#onDelete" text="Delete" />
-                        <MenuItem fx:id="Copy" mnemonicParsing="false" onAction="#onCopy" text="Copy" />
-                        <MenuItem fx:id="Paste" mnemonicParsing="false" onAction="#onPaste" text="Paste" />
-                        <MenuItem fx:id="undo" mnemonicParsing="false" onAction="#undo" text="Undo" />
-                        <MenuItem fx:id="redo" mnemonicParsing="false" onAction="#redo" text="Redo" />
-                    </items>
-                </Menu>
-                <Menu fx:id="Version" mnemonicParsing="false" text="Version">
-                    <items>
-                        <MenuItem fx:id="SaveVersion" mnemonicParsing="false" onAction="#saveVersion" text="SaveVersion" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="Previous" mnemonicParsing="false" onAction="#onPrevious" text="Previous" />
-                        <MenuItem fx:id="Next" mnemonicParsing="false" onAction="#onNext" text="Next" />
-                    </items>
-                </Menu>
-                <Menu fx:id="setStyle" mnemonicParsing="false" text="Set Style">
-                    <items>
-                        <MenuItem fx:id="cleanStyle" mnemonicParsing="false" onAction="#cleanStyle" text="Clean Style" />
-                        <SeparatorMenuItem mnemonicParsing="false" />
-                        <MenuItem fx:id="setBold" mnemonicParsing="false" onAction="#setBold" text="Set Bold" />
-                        <MenuItem fx:id="setItalic" mnemonicParsing="false" onAction="#setBlue" text="Set Blue Text" />
-                    </items>
-                </Menu>
-            </menus>
         </MenuBar>
         <HBox spacing="10">
             <VBox.margin>

@@ -22,10 +22,9 @@ public class CMenuItem implements Option{
             public void handle(ActionEvent event) {
                 switch (Id){
                     case "fileClose":
-                        combine.closeCmd();
                         break;
 
-                    case "save_File":
+                    case "save_file":
                         combine.saveCmd();
                         break;
 
@@ -65,6 +64,17 @@ public class CMenuItem implements Option{
                         combine.next();
                         break;
 
+                    case "cleanStyle":
+                        combine.cleanStyle();
+                        break;
+
+                    case "setBold":
+                        combine.setBold();
+                        break;
+
+                    case "setBlue":
+                        combine.setBlue();
+                        break;
                 }
 
             }

@@ -27,6 +27,7 @@ import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
 import javafx.stage.FileChooser;
+import javafx.stage.Stage;
 import observer.TextLength;
 import observer.TextObserver;
 import strategy.CodeMeth;
@@ -60,12 +61,7 @@ public class HelloController {
     private Menu MEditMethod;
     private Menu MTextEdit;
     private Menu MVersion;
-
-    @FXML
-    private Menu EditMethod,
-            TextEdit,
-            Version,
-            File;
+    private Menu MStyle;
 
     @FXML
     private TextField searchKeyWord;
@@ -90,23 +86,25 @@ public class HelloController {
     // Position in TextArea;
     private int curPosi;
 
-    // CommandInvoker use to invoke command;
     @FXML
     private MenuBar menuBar;
 
-    CommandInvoker cmdInvoker;
+    // CommandInvoker use to invoke command;
+    private CommandInvoker cmdInvoker;
 
     // Memento participant
-    Originator originator;
-    Caretaker caretaker;
-    Memento m;
+    private Originator originator;
+    private Caretaker caretaker;
+    private Memento m;
 
     // An outwindow
-    Context context;
+    private Context context;
 
     // Copy & Paste need to use
-    final Clipboard clipboard = Clipboard.getSystemClipboard();;
-    final ClipboardContent content = new ClipboardContent();
+    private final Clipboard clipboard = Clipboard.getSystemClipboard();;
+    private final ClipboardContent content = new ClipboardContent();
+
+    private Stage stage;
 
     public void initialize() throws NoSuchMethodException {
         textArea.setWrapText(true);
@@ -122,58 +120,15 @@ public class HelloController {
         m = originator.snapshot();
         caretaker.addMemento(m);
         context = new Context();
-        File.setVisible(false);
-        EditMethod.setVisible(false);
-        TextEdit.setVisible(false);
-        Version.setVisible(false);
         setListener();
-        test();
-    }
-
-    public TextArea getTextArea(){
-        return textArea;
-    }
-
-    public CommandInvoker getCmdInvoker(){
-        return cmdInvoker;
-    }
-
-    // clean style
-    public void cleanStyle(){
-        textArea.setStyle("");
-    }
-
-    // set Bold Style
-    public void setBold(){
-        if(textArea.getStyle() == ""){
-            SimpleTextStyle st = new SimpleTextStyle(textArea);
-            Bold b = new Bold(st,textArea);
-            b.setTextStyle();
-        }else{
-            SimpleTextStyle st = new SimpleTextStyle(textArea);
-            Blue i = new Blue(st,textArea);
-            Bold b = new Bold(i,textArea);
-            b.setTextStyle();
-        }
-    }
-
-    // set Italic Style
-    public void setBlue(){
-        if(textArea.getStyle() == ""){
-            SimpleTextStyle st = new SimpleTextStyle(textArea);
-            Blue i = new Blue(st,textArea);
-            i.setTextStyle();
-        }else{
-            SimpleTextStyle st = new SimpleTextStyle(textArea);
-            Bold b = new Bold(st,textArea);
-            Blue i = new Blue(b,textArea);
-            i.setTextStyle();
-        }
+        CreateMenu();
     }
 
     //test
-    public void test() throws NoSuchMethodException {
+    public void CreateMenu() throws NoSuchMethodException {
         Director director = new Director();
+
+        //Set MenuItem combine OnAction depends on which command the MenuItem is.
         Combine combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
 
         MenuBarBuilder readonlyBuilder = new ReadOnlyBuilder(combine);
@@ -187,11 +142,21 @@ public class HelloController {
         menuBar.getMenus().add(director.getMenuBar().getMenus().get(1));
         menuBar.getMenus().add(director.getMenuBar().getMenus().get(2));
         menuBar.getMenus().add(director.getMenuBar().getMenus().get(3));
+        menuBar.getMenus().add(director.getMenuBar().getMenus().get(4));
 
-        MFile = menuBar.getMenus().get(4);
-        MEditMethod = menuBar.getMenus().get(5);
-        MTextEdit = menuBar.getMenus().get(6);
-        MVersion = menuBar.getMenus().get(7);
+        MFile = menuBar.getMenus().get(0);
+        MEditMethod = menuBar.getMenus().get(1);
+        MTextEdit = menuBar.getMenus().get(2);
+        MVersion = menuBar.getMenus().get(3);
+        MStyle = menuBar.getMenus().get(4);
+
+        //Close the window
+        MFile.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.close();
+            }
+        });
 
         MEditMethod.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -268,6 +233,10 @@ public class HelloController {
         });
     }
 
+    public void setStage(Stage stage){
+        this.stage = stage;
+    }
+
     // use edit as Document file
     public void setDocMeth(){
         chooseMeth(new DocMeth());
@@ -300,145 +269,6 @@ public class HelloController {
         this.meth = meth;
     }
 
-    // save file method
-    @FXML
-    public void save() {
-        FileChooser chooser = new FileChooser();
-        chooser.setTitle("Choose location To Save Report");
-        File selectedFile = null;
-        selectedFile = chooser.showSaveDialog(null);
-//        while(selectedFile== null){
-//            selectedFile = chooser.showSaveDialog(null);
-//        }
-
-        File file = new File(String.valueOf(selectedFile));
-        PrintWriter outFile = null;
-        try {
-            outFile = new PrintWriter(file);
-        } catch (FileNotFoundException e) {
-            e.printStackTrace();
-        }
-        outFile.println(textArea.getText());
-        outFile.close();
-    }
-
-    // open file method
-    public void openFile() {
-        FileChooser fileChooser = new FileChooser();
-
-        //only allow text files to be selected using chooser
-        fileChooser.getExtensionFilters().add(
-                new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt")
-        );
-
-        //set initial directory somewhere user will recognise
-        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
-
-        //let user select file
-        File fileToLoad = fileChooser.showOpenDialog(null);
-
-        //if file has been chosen, load it using asynchronous method (define later)
-        if (fileToLoad != null) {
-            loadFileToTextArea(fileToLoad);
-        }
-    }
-
-    private void loadFileToTextArea(File fileToLoad) {
-        Task<String> loadTask = fileLoaderTask(fileToLoad);
-        loadTask.run();
-    }
-
-    private Task<String> fileLoaderTask(File fileToLoad) {
-        //Create a task to load the file asynchronously
-        Task<String> loadFileTask = new Task<>() {
-            @Override
-            protected String call() throws Exception {
-                BufferedReader reader = new BufferedReader(new FileReader(fileToLoad));
-
-                //Use Files.lines() to calculate total lines - used for progress
-                long lineCount;
-                try (Stream<String> stream = Files.lines(fileToLoad.toPath())) {
-                    lineCount = stream.count();
-                }
-
-                //Load in all lines one by one into a StringBuilder separated by "\n" - compatible with TextArea
-                String line;
-                StringBuilder totalFile = new StringBuilder();
-                long linesLoaded = 0;
-                while ((line = reader.readLine()) != null) {
-                    totalFile.append(line);
-                    totalFile.append("\n");
-                    updateProgress(++linesLoaded, lineCount);
-                }
-
-                return totalFile.toString();
-            }
-        };
-
-        //If successful, update the text area, display a success message and store the loaded file reference
-        loadFileTask.setOnSucceeded(workerStateEvent -> {
-            try {
-                textArea.setText(loadFileTask.get());
-            } catch (InterruptedException | ExecutionException e) {
-                textArea.setText("Could not load file from:\n " + fileToLoad.getAbsolutePath());
-            }
-        });
-
-        //If unsuccessful, set text area with error message and status message to failed
-        loadFileTask.setOnFailed(workerStateEvent -> {
-            textArea.setText("Could not load file from:\n " + fileToLoad.getAbsolutePath());
-        });
-
-        return loadFileTask;
-    }
-
-    public void onCopy(){
-        CopyCommand cop = new CopyCommand(textArea,clipboard,content,curPosi);
-        cmdInvoker.execute(cop);
-
-    }
-
-    // Do PasteCommand
-    public void onPaste(){
-        PasteCommand pas = new PasteCommand(textArea,clipboard,curPosi);
-        cmdInvoker.execute(pas);
-    }
-
-    // Do DeleteCommand
-    public void onDelete(){
-        DeleteCommand del = new DeleteCommand(textArea,curPosi);
-        cmdInvoker.execute(del);
-    }
-
-    // Back to before the last Command execute or Cancel Redo
-    public void undo(){
-        cmdInvoker.undo();
-    }
-
-    // Cancel Undo
-    public void redo(){
-        cmdInvoker.redo();
-    }
-
-    // Save Version
-    public void saveVersion(){
-        originator.setText(textArea.getText());
-        m = originator.snapshot();
-        caretaker.addMemento(m);
-    }
-
-    // Back to Previous Version
-    public void onPrevious(){
-        originator.restore(caretaker.undo());
-        textArea.setText(originator.getText());
-    }
-
-    // Cancel Back to Previous Version
-    public void onNext(){
-        originator.restore(caretaker.redo());
-        textArea.setText(originator.getText());
-    }
-
     // Change to Editor or Reader
     public void toggleButton(ActionEvent actionEvent){
         if (actionEvent.getSource() == buttonEditor) {
@@ -448,6 +278,7 @@ public class HelloController {
             MEditMethod.setVisible(context.getState().canUse());
             MTextEdit.setVisible(context.getState().canUse());
             MVersion.setVisible(context.getState().canUse());
+            MStyle.setVisible(context.getState().canUse());
         } else if (actionEvent.getSource() == buttonReader) {
             ReadState readState = new ReadState();
             readState.doAction(context);
@@ -455,11 +286,182 @@ public class HelloController {
             MEditMethod.setVisible(context.getState().canUse());
             MTextEdit.setVisible(context.getState().canUse());
             MVersion.setVisible(context.getState().canUse());
+            MStyle.setVisible(context.getState().canUse());
         }
     }
 
 }
 
+//    // clean style
+//    public void cleanStyle(){
+//        textArea.setStyle("");
+//    }
+//
+//    // set Bold Style
+//    public void setBold(){
+//        if(textArea.getStyle() == ""){
+//            SimpleTextStyle st = new SimpleTextStyle(textArea);
+//            Bold b = new Bold(st,textArea);
+//            b.setTextStyle();
+//        }else{
+//            SimpleTextStyle st = new SimpleTextStyle(textArea);
+//            Blue i = new Blue(st,textArea);
+//            Bold b = new Bold(i,textArea);
+//            b.setTextStyle();
+//        }
+//    }
+//    // set Italic Style
+//    public void setBlue(){
+//        if(textArea.getStyle() == ""){
+//            SimpleTextStyle st = new SimpleTextStyle(textArea);
+//            Blue i = new Blue(st,textArea);
+//            i.setTextStyle();
+//        }else{
+//            SimpleTextStyle st = new SimpleTextStyle(textArea);
+//            Bold b = new Bold(st,textArea);
+//            Blue i = new Blue(b,textArea);
+//            i.setTextStyle();
+//        }
+//    }
+// save file method
+//    @FXML
+//    public void save() {
+//        FileChooser chooser = new FileChooser();
+//        chooser.setTitle("Choose location To Save Report");
+//        File selectedFile = null;
+//        selectedFile = chooser.showSaveDialog(null);
+////        while(selectedFile== null){
+////            selectedFile = chooser.showSaveDialog(null);
+////        }
+//
+//        File file = new File(String.valueOf(selectedFile));
+//        PrintWriter outFile = null;
+//        try {
+//            outFile = new PrintWriter(file);
+//        } catch (FileNotFoundException e) {
+//            e.printStackTrace();
+//        }
+//        outFile.println(textArea.getText());
+//        outFile.close();
+//    }
+//
+//    // open file method
+//    public void openFile() {
+//        FileChooser fileChooser = new FileChooser();
+//
+//        //only allow text files to be selected using chooser
+//        fileChooser.getExtensionFilters().add(
+//                new FileChooser.ExtensionFilter("Text files (*.txt)", "*.txt")
+//        );
+//
+//        //set initial directory somewhere user will recognise
+//        fileChooser.setInitialDirectory(new File(System.getProperty("user.home")));
+//
+//        //let user select file
+//        File fileToLoad = fileChooser.showOpenDialog(null);
+//
+//        //if file has been chosen, load it using asynchronous method (define later)
+//        if (fileToLoad != null) {
+//            loadFileToTextArea(fileToLoad);
+//        }
+//    }
+//
+//    private void loadFileToTextArea(File fileToLoad) {
+//        Task<String> loadTask = fileLoaderTask(fileToLoad);
+//        loadTask.run();
+//    }
+//
+//    private Task<String> fileLoaderTask(File fileToLoad) {
+//        //Create a task to load the file asynchronously
+//        Task<String> loadFileTask = new Task<>() {
+//            @Override
+//            protected String call() throws Exception {
+//                BufferedReader reader = new BufferedReader(new FileReader(fileToLoad));
+//
+//                //Use Files.lines() to calculate total lines - used for progress
+//                long lineCount;
+//                try (Stream<String> stream = Files.lines(fileToLoad.toPath())) {
+//                    lineCount = stream.count();
+//                }
+//
+//                //Load in all lines one by one into a StringBuilder separated by "\n" - compatible with TextArea
+//                String line;
+//                StringBuilder totalFile = new StringBuilder();
+//                long linesLoaded = 0;
+//                while ((line = reader.readLine()) != null) {
+//                    totalFile.append(line);
+//                    totalFile.append("\n");
+//                    updateProgress(++linesLoaded, lineCount);
+//                }
+//
+//                return totalFile.toString();
+//            }
+//        };
+//
+//        //If successful, update the text area, display a success message and store the loaded file reference
+//        loadFileTask.setOnSucceeded(workerStateEvent -> {
+//            try {
+//                textArea.setText(loadFileTask.get());
+//            } catch (InterruptedException | ExecutionException e) {
+//                textArea.setText("Could not load file from:\n " + fileToLoad.getAbsolutePath());
+//            }
+//        });
+//
+//        //If unsuccessful, set text area with error message and status message to failed
+//        loadFileTask.setOnFailed(workerStateEvent -> {
+//            textArea.setText("Could not load file from:\n " + fileToLoad.getAbsolutePath());
+//        });
+//
+//        return loadFileTask;
+//    }
+//
+//    public void onCopy(){
+//        CopyCommand cop = new CopyCommand(textArea,clipboard,content,curPosi);
+//        cmdInvoker.execute(cop);
+//
+//    }
+//
+//    // Do PasteCommand
+//    public void onPaste(){
+//        PasteCommand pas = new PasteCommand(textArea,clipboard,curPosi);
+//        cmdInvoker.execute(pas);
+//    }
+//
+//    // Do DeleteCommand
+//    public void onDelete(){
+//        DeleteCommand del = new DeleteCommand(textArea,curPosi);
+//        cmdInvoker.execute(del);
+//    }
+//
+//    // Back to before the last Command execute or Cancel Redo
+//    public void undo(){
+//        cmdInvoker.undo();
+//    }
+//
+//    // Cancel Undo
+//    public void redo(){
+//        cmdInvoker.redo();
+//    }
+//
+//    // Save Version
+//    public void saveVersion(){
+//        originator.setText(textArea.getText());
+//        m = originator.snapshot();
+//        caretaker.addMemento(m);
+//    }
+//
+//    // Back to Previous Version
+//    public void onPrevious(){
+//        originator.restore(caretaker.undo());
+//        textArea.setText(originator.getText());
+//    }
+//
+//    // Cancel Back to Previous Version
+//    public void onNext(){
+//        originator.restore(caretaker.redo());
+//        textArea.setText(originator.getText());
+//    }
+// -------------------1030------------------------------
 // timer example
 //    Timer = new Timer();
 //    timer.schedule(task,0,100);

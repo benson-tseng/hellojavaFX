@@ -57,9 +57,18 @@ public class EditBuilder extends MenuBarBuilder{
         cMenu4.add(previous);
         cMenu4.add(next);
         cMenu4.setMenuItem();
+        CMenu cMenu5 = new CMenu("Set Style","setStyle");
+        CMenuItem cleanStyle = new CMenuItem("Clean Style","cleanStyle",combine);
+        CMenuItem setBold = new CMenuItem("Set Bold","setBold",combine);
+        CMenuItem setBlue = new CMenuItem("Set Blue","setBlue",combine);
+        cMenu5.add(cleanStyle);
+        cMenu5.add(setBold);
+        cMenu5.add(setBlue);
+        cMenu5.setMenuItem();
         menuBar.getMenus().add(cMenu1.getMenu());
         menuBar.getMenus().add(cMenu2.getMenu());
         menuBar.getMenus().add(cMenu3.getMenu());
         menuBar.getMenus().add(cMenu4.getMenu());
+        menuBar.getMenus().add(cMenu5.getMenu());
     }
 }

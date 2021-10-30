@@ -12,6 +12,7 @@ import java.io.IOException;
 
 public class HelloApplication extends Application {
     private FXMLLoader fxmlLoader;
+
     @Override
     public void start(Stage stage) throws IOException {
 
@@ -30,10 +31,12 @@ public class HelloApplication extends Application {
         stage.show();
         HelloController controller = fxmlLoader.getController();
         controller.setScene(scene);
+        controller.setStage(stage);
         controller.totalText();
     }
 
     public static void main(String[] args) {
         launch();
     }
+
 }
