@@ -52,6 +52,14 @@
                         <MenuItem fx:id="Next" mnemonicParsing="false" onAction="#onNext" text="Next" />
                     </items>
                 </Menu>
+                <Menu fx:id="setStyle" mnemonicParsing="false" text="Set Style">
+                    <items>
+                        <MenuItem fx:id="cleanStyle" mnemonicParsing="false" onAction="#cleanStyle" text="Clean Style" />
+                        <SeparatorMenuItem mnemonicParsing="false" />
+                        <MenuItem fx:id="setBold" mnemonicParsing="false" onAction="#setBold" text="Set Bold" />
+                        <MenuItem fx:id="setItalic" mnemonicParsing="false" onAction="#setBlue" text="Set Blue Text" />
+                    </items>
+                </Menu>
             </menus>
         </MenuBar>
         <HBox spacing="10">

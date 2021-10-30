@@ -6,6 +6,7 @@ import composite.CMenu;
 import composite.CMenuItem;
 import com.example.hellojavafx.HelloController;
 import javafx.event.ActionEvent;
+import javafx.scene.control.SeparatorMenuItem;
 import javafx.scene.control.TextArea;
 
 import java.lang.invoke.MethodHandle;

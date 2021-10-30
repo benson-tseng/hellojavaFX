@@ -4,6 +4,9 @@ import builder.Director;
 import builder.EditBuilder;
 import builder.MenuBarBuilder;
 import builder.ReadOnlyBuilder;
+import decorator.Blue;
+import decorator.Bold;
+import decorator.SimpleTextStyle;
 import interator.IntSet;
 import interator.Iterator;
 import javafx.beans.value.ChangeListener;
@@ -59,13 +62,10 @@ public class HelloController {
     private Menu MVersion;
 
     @FXML
-    private Menu EditMethod;
-
-    @FXML
-    private Menu TextEdit;
-
-    @FXML
-    private Menu Version;
+    private Menu EditMethod,
+            TextEdit,
+            Version,
+            File;
 
     @FXML
     private TextField searchKeyWord;
@@ -122,6 +122,10 @@ public class HelloController {
         m = originator.snapshot();
         caretaker.addMemento(m);
         context = new Context();
+        File.setVisible(false);
+        EditMethod.setVisible(false);
+        TextEdit.setVisible(false);
+        Version.setVisible(false);
         setListener();
         test();
     }
@@ -132,6 +136,39 @@ public class HelloController {
 
     public CommandInvoker getCmdInvoker(){
         return cmdInvoker;
+    }
+
+    // clean style
+    public void cleanStyle(){
+        textArea.setStyle("");
+    }
+
+    // set Bold Style
+    public void setBold(){
+        if(textArea.getStyle() == ""){
+            SimpleTextStyle st = new SimpleTextStyle(textArea);
+            Bold b = new Bold(st,textArea);
+            b.setTextStyle();
+        }else{
+            SimpleTextStyle st = new SimpleTextStyle(textArea);
+            Blue i = new Blue(st,textArea);
+            Bold b = new Bold(i,textArea);
+            b.setTextStyle();
+        }
+    }
+
+    // set Italic Style
+    public void setBlue(){
+        if(textArea.getStyle() == ""){
+            SimpleTextStyle st = new SimpleTextStyle(textArea);
+            Blue i = new Blue(st,textArea);
+            i.setTextStyle();
+        }else{
+            SimpleTextStyle st = new SimpleTextStyle(textArea);
+            Bold b = new Bold(st,textArea);
+            Blue i = new Blue(b,textArea);
+            i.setTextStyle();
+        }
     }
 
     //test
@@ -408,9 +445,6 @@ public class HelloController {
             EditState editState = new EditState();
             editState.doAction(context);
             textArea.setEditable(context.getState().canUse());
-            EditMethod.setVisible(context.getState().canUse());
-            TextEdit.setVisible(context.getState().canUse());
-            Version.setVisible(context.getState().canUse());
             MEditMethod.setVisible(context.getState().canUse());
             MTextEdit.setVisible(context.getState().canUse());
             MVersion.setVisible(context.getState().canUse());
@@ -418,9 +452,6 @@ public class HelloController {
             ReadState readState = new ReadState();
             readState.doAction(context);
             textArea.setEditable(context.getState().canUse());
-            EditMethod.setVisible(context.getState().canUse());
-            TextEdit.setVisible(context.getState().canUse());
-            Version.setVisible(context.getState().canUse());
             MEditMethod.setVisible(context.getState().canUse());
             MTextEdit.setVisible(context.getState().canUse());
             MVersion.setVisible(context.getState().canUse());
