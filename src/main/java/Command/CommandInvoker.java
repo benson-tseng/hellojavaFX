@@ -2,13 +2,14 @@ package Command;
 
 import java.util.Stack;
 
+//Apply Singleton Pattern
 public class CommandInvoker {
-
+    private static CommandInvoker commandInvoker;
     //Save undo & redo command in stack;
     private Stack<Command> UndoStack;
     private Stack<Command> RedoStack;
 
-    public CommandInvoker(){
+    private CommandInvoker(){
         UndoStack = new Stack<Command>();
         RedoStack = new Stack<Command>();
     }
@@ -37,6 +38,17 @@ public class CommandInvoker {
             UndoStack.push(cmd);
             cmd.execute();
         }
+    }
+
+    public static CommandInvoker getInstance(){
+        if(commandInvoker == null){
+            synchronized (CommandInvoker.class){
+                if (commandInvoker == null){
+                    commandInvoker = new CommandInvoker();
+                }
+            }
+        }
+        return commandInvoker;
     }
 
 }

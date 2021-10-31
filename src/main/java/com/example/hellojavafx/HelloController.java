@@ -113,7 +113,7 @@ public class HelloController {
         resultNum.setFont(Font.font(null, FontWeight.LIGHT, 15));
         totalTextNum.setFont(Font.font(null, FontWeight.BLACK, 15));
         chooseWord.setVisibleRowCount(5);
-        cmdInvoker = new CommandInvoker();
+        cmdInvoker = CommandInvoker.getInstance();
         originator = new Originator();
         caretaker = new Caretaker();
         originator.setText(textArea.getText());
