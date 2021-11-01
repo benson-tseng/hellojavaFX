@@ -1,79 +1,77 @@
 package composite;
 
 import Command.*;
-import com.example.hellojavafx.Combine;
+import Command.Combine;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
-import javafx.scene.control.TextArea;
-
-import java.lang.reflect.InvocationTargetException;
-import java.lang.reflect.Method;
 
 public class CMenuItem implements Option{
     private MenuItem menuItem;
-    Combine combine;
+    private Combine combine;
+    private CommandInvoker commandInvoker;
 
-    public CMenuItem(String text, String Id,Combine combine){
+    public CMenuItem(String text, String Id,Combine combine,CommandInvoker commandInvoker){
         this.menuItem = new MenuItem(text);
         this.combine = combine;
+        this.commandInvoker = commandInvoker;
         menuItem.setId(Id);
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 switch (Id){
-                    case "fileClose":
-                        break;
-
                     case "save_file":
-                        combine.saveCmd();
+                        SaveCommand save = new SaveCommand(combine);
+                        commandInvoker.execute(save);
                         break;
 
                     case "open_file":
-                        combine.openCmd();
+                        OpenCommand open = new OpenCommand(combine);
+                        commandInvoker.execute(open);
                         break;
 
                     case "Delete":
-                        combine.deleteCmd();
+                        DeleteCommand del = new DeleteCommand(combine);
+                        commandInvoker.execute(del);
                         break;
 
                     case "Copy":
-                        combine.copyCmd();
+                        CopyCommand copy = new CopyCommand(combine);
+                        commandInvoker.execute(copy);
                         break;
 
                     case "Paste":
-                        combine.pasteCmd();
-                        break;
-
-                    case "undo":
-                        combine.undo();
-                        break;
-
-                    case "redo":
-                        combine.redo();
+                        PasteCommand paste = new PasteCommand(combine);
+                        commandInvoker.execute(paste);
                         break;
 
                     case "SaveVersion":
-                        combine.saveVersion();
+                        SaveVersion saveVersion = new SaveVersion(combine);
+                        commandInvoker.execute(saveVersion);
                         break;
 
                     case "Previous":
-                        combine.previous();
+                        PreviousCommand previous = new PreviousCommand(combine);
+                        commandInvoker.execute(previous);
                         break;
 
                     case "Next":
-                        combine.next();
+                        NextCommand next = new NextCommand(combine);
+                        commandInvoker.execute(next);
                         break;
 
                     case "cleanStyle":
-                        combine.cleanStyle();
+                        CleanCommand clean = new CleanCommand(combine);
+                        commandInvoker.execute(clean);
                         break;
 
                     case "setBold":
-                        combine.setBold();
+                        BoldCommand bold = new BoldCommand(combine);
+                        commandInvoker.execute(bold);
                         break;
 
                     case "setBlue":
-                        combine.setBlue();
+                        BlueCommand blue = new BlueCommand(combine);
+                        commandInvoker.execute(blue);
                         break;
                 }
 
@@ -84,3 +82,12 @@ public class CMenuItem implements Option{
         return menuItem;
     }
 }
+
+
+//                    case "undo":
+//                        commandInvoker.undo();
+//                        break;
+//
+//                    case "redo":
+//                        commandInvoker.redo();
+//                        break;

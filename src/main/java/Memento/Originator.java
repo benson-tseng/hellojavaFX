@@ -1,17 +1,24 @@
 package Memento;
 
-import javafx.scene.control.TextArea;
 
-public class Originator extends TextArea {
+public class Originator {
+    private String textstates;
 
+    public Originator (String textstates){
+        this.textstates = textstates;
+    }
     //Set Memento
     public void restore(Memento m){
-        this.setText(m.getText());
+        this.textstates = m.getText();
     }
 
     //Save Current Version to new Memento;
     public Memento snapshot() {
-        return new Memento(this.getText());
+        return new Memento(textstates);
+    }
+
+    public String getTextStates(){
+        return this.textstates;
     }
 
 }

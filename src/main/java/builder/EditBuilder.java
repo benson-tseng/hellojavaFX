@@ -1,66 +1,57 @@
 package builder;
 
 import Command.*;
-import com.example.hellojavafx.Combine;
+import Command.Combine;
 import composite.CMenu;
 import composite.CMenuItem;
-import com.example.hellojavafx.HelloController;
-import javafx.event.ActionEvent;
-import javafx.scene.control.SeparatorMenuItem;
-import javafx.scene.control.TextArea;
-
-import java.lang.invoke.MethodHandle;
 
 public class EditBuilder extends MenuBarBuilder{
-
+    CommandInvoker commandInvoker;
     Combine combine;
-    public EditBuilder(Combine combine){
+    public EditBuilder(Combine combine,CommandInvoker commandInvoker){
          this.combine = combine;
+         this.commandInvoker = commandInvoker;
     }
 
     public void buildMenuBar() {
         Class[] parameterTypes = new Class[1];
         parameterTypes[0] = String.class;
         CMenu cMenu1 = new CMenu("File","File");
-        CMenuItem close = new CMenuItem("Close","fileClose",combine);
-        CMenuItem saveFile = new CMenuItem("SaveFile","save_file",combine);
-        CMenuItem openFile = new CMenuItem("OpenFile","open_file",combine);
+        CMenuItem close = new CMenuItem("Close","fileClose",combine,commandInvoker);
+        CMenuItem saveFile = new CMenuItem("SaveFile","save_file",combine,commandInvoker);
+        CMenuItem openFile = new CMenuItem("OpenFile","open_file",combine,commandInvoker);
         cMenu1.add(close);
         cMenu1.add(saveFile);
         cMenu1.add(openFile);
         cMenu1.setMenuItem();
         CMenu cMenu2 = new CMenu("Edit Method","EditMethod");
-        CMenuItem docEdit = new CMenuItem("Doc Edit","docEdit",combine);
-        CMenuItem codeEdit = new CMenuItem("Code Edit","codeEdit",combine);
-        CMenuItem htmlEdit = new CMenuItem("HTML Edit","htmlEdit",combine);
+        CMenuItem docEdit = new CMenuItem("Doc Edit","docEdit",combine,commandInvoker);
+        CMenuItem codeEdit = new CMenuItem("Code Edit","codeEdit",combine,commandInvoker);
+        CMenuItem htmlEdit = new CMenuItem("HTML Edit","htmlEdit",combine,commandInvoker);
         cMenu2.add(docEdit);
         cMenu2.add(codeEdit);
         cMenu2.add(htmlEdit);
         cMenu2.setMenuItem();
         CMenu cMenu3 = new CMenu("TextEdit","TextEdit");
-        CMenuItem delete = new CMenuItem("Delete","Delete",combine);
-        CMenuItem copy = new CMenuItem("Copy","Copy",combine);
-        CMenuItem paste = new CMenuItem("Paste","Paste",combine);
-        CMenuItem undo = new CMenuItem("Undo","undo",combine);
-        CMenuItem redo = new CMenuItem("Redo","redo",combine);
+        CMenuItem delete = new CMenuItem("Delete","Delete",combine,commandInvoker);
+        CMenuItem copy = new CMenuItem("Copy","Copy",combine,commandInvoker);
+        CMenuItem paste = new CMenuItem("Paste","Paste",combine,commandInvoker);
         cMenu3.add(delete);
         cMenu3.add(copy);
         cMenu3.add(paste);
-        cMenu3.add(undo);
-        cMenu3.add(redo);
         cMenu3.setMenuItem();
         CMenu cMenu4 = new CMenu("Version","Version");
-        CMenuItem saveVersion = new CMenuItem("Save Version","SaveVersion",combine);
-        CMenuItem previous = new CMenuItem("Previous","Previous",combine);
-        CMenuItem next = new CMenuItem("Next","Next",combine);
+        CMenuItem saveVersion = new CMenuItem("Save Version","SaveVersion",combine,commandInvoker);
+        CMenuItem previous = new CMenuItem("Previous","Previous",combine,commandInvoker);
+        CMenuItem next = new CMenuItem("Next","Next",combine,commandInvoker);
         cMenu4.add(saveVersion);
         cMenu4.add(previous);
         cMenu4.add(next);
         cMenu4.setMenuItem();
         CMenu cMenu5 = new CMenu("Set Style","setStyle");
-        CMenuItem cleanStyle = new CMenuItem("Clean Style","cleanStyle",combine);
-        CMenuItem setBold = new CMenuItem("Set Bold","setBold",combine);
-        CMenuItem setBlue = new CMenuItem("Set Blue","setBlue",combine);
+        CMenuItem cleanStyle = new CMenuItem("Clean Style","cleanStyle",combine,commandInvoker);
+        CMenuItem setBold = new CMenuItem("Set Bold","setBold",combine,commandInvoker);
+        CMenuItem setBlue = new CMenuItem("Set Blue","setBlue",combine,commandInvoker);
         cMenu5.add(cleanStyle);
         cMenu5.add(setBold);
         cMenu5.add(setBlue);
@@ -72,3 +63,8 @@ public class EditBuilder extends MenuBarBuilder{
         menuBar.getMenus().add(cMenu5.getMenu());
     }
 }
+
+//    CMenuItem undo = new CMenuItem("Undo","undo",combine,commandInvoker);
+//    CMenuItem redo = new CMenuItem("Redo","redo",combine,commandInvoker);
+//    cMenu3.add(undo);
+//    cMenu3.add(redo);

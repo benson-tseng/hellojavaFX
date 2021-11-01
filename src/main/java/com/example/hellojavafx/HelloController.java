@@ -1,17 +1,14 @@
 package com.example.hellojavafx;
 
+import Command.*;
 import builder.Director;
 import builder.EditBuilder;
 import builder.MenuBarBuilder;
 import builder.ReadOnlyBuilder;
-import decorator.Blue;
-import decorator.Bold;
-import decorator.SimpleTextStyle;
 import interator.IntSet;
 import interator.Iterator;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
-import javafx.concurrent.Task;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
@@ -19,14 +16,11 @@ import javafx.scene.Scene;
 import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
-import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.input.MouseEvent;
-import javafx.scene.layout.VBox;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
-import javafx.stage.FileChooser;
 import javafx.stage.Stage;
 import observer.TextLength;
 import observer.TextObserver;
@@ -34,21 +28,12 @@ import strategy.CodeMeth;
 import strategy.DocMeth;
 import strategy.HtmlMeth;
 import strategy.Meth;
-import Command.CommandInvoker;
-import Command.DeleteCommand;
-import Command.CopyCommand;
-import Command.PasteCommand;
 import Memento.Caretaker;
 import Memento.Memento;
 import Memento.Originator;
 import State.ReadState;
 import State.EditState;
 import State.Context;
-
-import java.io.*;
-import java.nio.file.Files;
-import java.util.concurrent.ExecutionException;
-import java.util.stream.Stream;
 
 
 public class HelloController {
@@ -92,6 +77,8 @@ public class HelloController {
     // CommandInvoker use to invoke command;
     private CommandInvoker cmdInvoker;
 
+    private Combine combine;
+
     // Memento participant
     private Originator originator;
     private Caretaker caretaker;
@@ -114,14 +101,15 @@ public class HelloController {
         totalTextNum.setFont(Font.font(null, FontWeight.BLACK, 15));
         chooseWord.setVisibleRowCount(5);
         cmdInvoker = CommandInvoker.getInstance();
-        originator = new Originator();
+        originator = new Originator(textArea.getText());
         caretaker = new Caretaker();
-        originator.setText(textArea.getText());
         m = originator.snapshot();
         caretaker.addMemento(m);
+        CreateMenu();
+
         context = new Context();
         setListener();
-        CreateMenu();
+
     }
 
     //test
@@ -129,10 +117,10 @@ public class HelloController {
         Director director = new Director();
 
         //Set MenuItem combine OnAction depends on which command the MenuItem is.
-        Combine combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
+        combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
 
-        MenuBarBuilder readonlyBuilder = new ReadOnlyBuilder(combine);
-        MenuBarBuilder edit = new EditBuilder(combine);
+        MenuBarBuilder readonlyBuilder = new ReadOnlyBuilder(combine,cmdInvoker);
+        MenuBarBuilder edit = new EditBuilder(combine,cmdInvoker);
 
 
         director.setMenuBarBuilder(edit);

@@ -1,45 +1,27 @@
 package Command;
 
-import javafx.fxml.FXML;
-import javafx.scene.control.TextArea;
-
 
 public class DeleteCommand implements Command{
 
-    @FXML
-    private TextArea textArea;
-
-    private String tems;//Save the temporary String of TextArea
-    private int deleteIndex;
-    private int curPosi;
+    private Combine combine;
 
     ////Let DeleteCommand's TextArea & curPosi equals to Controller
-    public DeleteCommand (TextArea TName,int curPosi){
-        this.textArea = TName;
-        this.curPosi = curPosi + textArea.getSelectedText().length();
+    public DeleteCommand (Combine combine){
+        this.combine = combine;
     }
 
     public void execute(){
-        tems = textArea.getText();
-        deleteIndex = textArea.getLength() - 1;
-        if (deleteIndex >= 0) {
-            textArea.setText(tems.substring(0,deleteIndex));//Retain text before the deleted char
-        }
-        textArea.positionCaret(curPosi);
+        combine.deleteCmd();
     }
 
-    public void undo(){
-        if (deleteIndex >= 0) {
-            ;
-        }
-        textArea.setText(tems);
-        textArea.positionCaret(curPosi);
-    }
-
-    public boolean isReversible(){
-
-        return true;
-
-    }
+//    public void undo(){
+//        combine.delUndo();
+//    }
+//
+//    public boolean isReversible(){
+//
+//        return true;
+//
+//    }
 
 }
