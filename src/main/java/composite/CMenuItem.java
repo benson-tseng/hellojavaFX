@@ -81,6 +81,10 @@ public class CMenuItem implements Option{
     public MenuItem getMenuItem(){
         return menuItem;
     }
+
+    public void click(){
+        System.out.println("click Option");
+    }
 }
 
 
