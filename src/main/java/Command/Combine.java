@@ -1,17 +1,5 @@
 package Command;
 
-import Command.CommandInvoker;
-import Command.CopyCommand;
-import Command.PasteCommand;
-import Command.DeleteCommand;
-import Command.OpenCommand;
-import Command.SaveCommand;
-import Command.SaveVersion;
-import Command.PreviousCommand;
-import Command.NextCommand;
-import Command.CleanCommand;
-import Command.BoldCommand;
-import Command.BlueCommand;
 import Memento.Caretaker;
 import Memento.Memento;
 import Memento.Originator;
@@ -103,25 +91,27 @@ public class Combine {
     public void copyCmd(){
         content.putString(textArea.getSelectedText());
         clipboard.setContent(content);
-        textArea.positionCaret(curPosi);
+        textArea.positionCaret(textArea.getCaretPosition()+textArea.getSelectedText().length());
     }
 
     //Do Delete text
     public void deleteCmd(){
+        int i = textArea.getCaretPosition();
         tems = textArea.getText();
-        deleteIndex = textArea.getLength() - 1;
+        deleteIndex = textArea.getCaretPosition();
         if (deleteIndex >= 0) {
-            textArea.setText(tems.substring(0,deleteIndex));//Retain text before the deleted char
+            textArea.setText(tems.substring(0,deleteIndex) + tems.substring(deleteIndex+textArea.getSelectedText().length(),textArea.getLength()));//Retain text before the deleted char
         }
-        textArea.positionCaret(curPosi);
+        textArea.positionCaret(i);
     }
 
     //Do Paste text
     public void pasteCmd(){
+        int tmpCur = textArea.getCaretPosition();
         sb = new StringBuffer(textArea.getText());
         tems = textArea.getText();
         textArea.setText(String.valueOf(sb.insert(textArea.getCaretPosition(),clipboard.getString())));
-        textArea.positionCaret(curPosi);
+        textArea.positionCaret(tmpCur+clipboard.getString().length());
     }
 
     //Return to the state before the command do

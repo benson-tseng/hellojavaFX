@@ -2,15 +2,18 @@ package builder;
 
 import Command.*;
 import Command.Combine;
+import State.Context;
 import composite.CMenu;
 import composite.CMenuItem;
 
 public class EditBuilder extends MenuBarBuilder{
-    CommandInvoker commandInvoker;
-    Combine combine;
-    public EditBuilder(Combine combine,CommandInvoker commandInvoker){
+    private CommandInvoker commandInvoker;
+    private Combine combine;
+    private Context context;
+    public EditBuilder(Combine combine,CommandInvoker commandInvoker,Context context){
          this.combine = combine;
          this.commandInvoker = commandInvoker;
+         this.context = context;
     }
 
     public void buildMenuBar() {

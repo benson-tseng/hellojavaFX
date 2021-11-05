@@ -14,7 +14,6 @@ public class Caretaker {
        if (curPos != m.size() && curPos > 0){
            m = m.subList(0, curPos);
        }
-       System.out.println(curPos);
        m.add(memento);
        curPos = m.size();
     }

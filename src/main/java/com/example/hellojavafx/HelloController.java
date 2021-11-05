@@ -91,6 +91,8 @@ public class HelloController {
     private final Clipboard clipboard = Clipboard.getSystemClipboard();;
     private final ClipboardContent content = new ClipboardContent();
 
+    EditState editState = new EditState();
+    ReadState readState = new ReadState();
     private Stage stage;
 
     public void initialize() throws NoSuchMethodException {
@@ -105,9 +107,10 @@ public class HelloController {
         caretaker = new Caretaker();
         m = originator.snapshot();
         caretaker.addMemento(m);
+        context = new Context();
         CreateMenu();
 
-        context = new Context();
+
         setListener();
 
     }
@@ -115,36 +118,23 @@ public class HelloController {
     //test
     public void CreateMenu() throws NoSuchMethodException {
         Director director = new Director();
-
+        System.out.println(1);
+        System.out.println(textArea.getCaretPosition());
         //Set MenuItem combine OnAction depends on which command the MenuItem is.
         combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
-
-        MenuBarBuilder readonlyBuilder = new ReadOnlyBuilder(combine,cmdInvoker);
-        MenuBarBuilder edit = new EditBuilder(combine,cmdInvoker);
-
-
+        MenuBarBuilder edit = new EditBuilder(combine,cmdInvoker,context);
         director.setMenuBarBuilder(edit);
         director.constructMenuBar();
 
-        menuBar.getMenus().add(director.getMenuBar().getMenus().get(0));
-        menuBar.getMenus().add(director.getMenuBar().getMenus().get(1));
-        menuBar.getMenus().add(director.getMenuBar().getMenus().get(2));
-        menuBar.getMenus().add(director.getMenuBar().getMenus().get(3));
-        menuBar.getMenus().add(director.getMenuBar().getMenus().get(4));
+        for(int i = 0; i < director.getMenuBar().getMenus().size(); i++){
+            menuBar.getMenus().add(director.getMenuBar().getMenus().get(i));
+        }
 
         MFile = menuBar.getMenus().get(0);
         MEditMethod = menuBar.getMenus().get(1);
         MTextEdit = menuBar.getMenus().get(2);
         MVersion = menuBar.getMenus().get(3);
         MStyle = menuBar.getMenus().get(4);
-
-        //Close the window
-        MFile.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stage.close();
-            }
-        });
 
         MEditMethod.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -166,6 +156,19 @@ public class HelloController {
                 setHtmlMeth();
             }
         });
+        //Close the window
+        MFile.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.close();
+            }
+        });
+
+
+
+
+
+
     }
 
     // count total text method
@@ -190,35 +193,39 @@ public class HelloController {
 
     // search word method
     public void searchWord(){
-        StringBuffer sb = new StringBuffer(textArea.getText());
-        this.intSet = new IntSet(1000);
-        for(int i = 0; i <= this.textArea.getLength()-this.searchKeyWord.getLength();i++){
-            if(sb.substring(i,i+this.searchKeyWord.getLength()).equals(this.searchKeyWord.getText())){
-                intSet.appendInt(i);
+        if(this.searchKeyWord.getText() != ""){
+            StringBuffer sb = new StringBuffer(textArea.getText());
+            this.intSet = new IntSet(1000);
+            for(int i = 0; i <= this.textArea.getLength()-this.searchKeyWord.getLength();i++){
+                if(sb.substring(i,i+this.searchKeyWord.getLength()).equals(this.searchKeyWord.getText())){
+                    intSet.appendInt(i);
+                }
             }
+            Iterator it = intSet.iterator();
+            int countResult = 0;
+            chooseWord.getItems().clear();
+            while (it.hasNext()) {
+                countResult+=1;
+                int i = (int)it.next();
+                chooseWord.getItems().add("Record "+countResult);
+            }
+            resultNum.setText(countResult + " Record");
+        }else{
+            resultNum.setText("Insert the keyword!");
         }
-        Iterator it = intSet.iterator();
-        int countResult = 0;
-        chooseWord.getItems().clear();
-        while (it.hasNext()) {
-            countResult+=1;
-            int i = (int)it.next();
-            chooseWord.getItems().add("Record "+countResult);
-        }
-        resultNum.setText(countResult + " Record");
     }
 
     // set scene which passed by Application
     public void setScene(Scene scene){
         this.scene = scene;
         //Listen the keyboard event
-        scene.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-            curPosi = textArea.getCaretPosition();
-        });
-        //Listen the mouse event
-        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
-            curPosi = textArea.getCaretPosition();
-        });
+//        scene.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
+//            curPosi = textArea.getCaretPosition();
+//        });
+//        //Listen the mouse event
+//        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
+//            curPosi = textArea.getCaretPosition();
+//        });
     }
 
     public void setStage(Stage stage){
@@ -259,23 +266,80 @@ public class HelloController {
 
     // Change to Editor or Reader
     public void toggleButton(ActionEvent actionEvent){
+        menuBar.getMenus().clear();
         if (actionEvent.getSource() == buttonEditor) {
-            EditState editState = new EditState();
             editState.doAction(context);
-            textArea.setEditable(context.getState().canUse());
-            MEditMethod.setVisible(context.getState().canUse());
-            MTextEdit.setVisible(context.getState().canUse());
-            MVersion.setVisible(context.getState().canUse());
-            MStyle.setVisible(context.getState().canUse());
+
         } else if (actionEvent.getSource() == buttonReader) {
-            ReadState readState = new ReadState();
+            ReadState read = new ReadState();
             readState.doAction(context);
-            textArea.setEditable(context.getState().canUse());
-            MEditMethod.setVisible(context.getState().canUse());
-            MTextEdit.setVisible(context.getState().canUse());
-            MVersion.setVisible(context.getState().canUse());
-            MStyle.setVisible(context.getState().canUse());
+
         }
+
+        //Set MenuItem combine OnAction depends on which command the MenuItem is.
+        combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
+        if (context.getState() == editState){
+            Director director = new Director();
+            System.out.println(1);
+            System.out.println(textArea.getCaretPosition());
+            MenuBarBuilder edit = new EditBuilder(combine,cmdInvoker,context);
+            director.setMenuBarBuilder(edit);
+            director.constructMenuBar();
+
+            for(int i = 0; i < director.getMenuBar().getMenus().size(); i++){
+                menuBar.getMenus().add(director.getMenuBar().getMenus().get(i));
+            }
+
+            MFile = menuBar.getMenus().get(0);
+            MEditMethod = menuBar.getMenus().get(1);
+            MTextEdit = menuBar.getMenus().get(2);
+            MVersion = menuBar.getMenus().get(3);
+            MStyle = menuBar.getMenus().get(4);
+
+            MEditMethod.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    setDocMeth();
+                }
+            });
+
+            MEditMethod.getItems().get(1).setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    setCodeMeth();
+                }
+            });
+
+            MEditMethod.getItems().get(2).setOnAction(new EventHandler<ActionEvent>() {
+                @Override
+                public void handle(ActionEvent event) {
+                    setHtmlMeth();
+                }
+            });
+        } else if (context.getState() == readState){
+            Director director = new Director();
+            System.out.println(1);
+            System.out.println(textArea.getCaretPosition());
+            MenuBarBuilder read = new ReadOnlyBuilder(combine,cmdInvoker,context);
+            director.setMenuBarBuilder(read);
+            director.constructMenuBar();
+
+            for(int i = 0; i < director.getMenuBar().getMenus().size(); i++){
+                menuBar.getMenus().add(director.getMenuBar().getMenus().get(i));
+            }
+
+            MFile = menuBar.getMenus().get(0);
+        }
+
+
+
+        //Close the window
+        MFile.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
+            @Override
+            public void handle(ActionEvent event) {
+                stage.close();
+            }
+        });
     }
 
 }
