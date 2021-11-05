@@ -118,8 +118,6 @@ public class HelloController {
     //test
     public void CreateMenu() throws NoSuchMethodException {
         Director director = new Director();
-        System.out.println(1);
-        System.out.println(textArea.getCaretPosition());
         //Set MenuItem combine OnAction depends on which command the MenuItem is.
         combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
         MenuBarBuilder edit = new EditBuilder(combine,cmdInvoker,context);
@@ -218,14 +216,6 @@ public class HelloController {
     // set scene which passed by Application
     public void setScene(Scene scene){
         this.scene = scene;
-        //Listen the keyboard event
-//        scene.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
-//            curPosi = textArea.getCaretPosition();
-//        });
-//        //Listen the mouse event
-//        scene.addEventFilter(MouseEvent.MOUSE_PRESSED, (MouseEvent event) -> {
-//            curPosi = textArea.getCaretPosition();
-//        });
     }
 
     public void setStage(Stage stage){
