@@ -86,12 +86,3 @@ public class CMenuItem implements Option{
         System.out.println("click Option");
     }
 }
-
-
-//                    case "undo":
-//                        commandInvoker.undo();
-//                        break;
-//
-//                    case "redo":
-//                        commandInvoker.redo();
-//                        break;

@@ -11,8 +11,6 @@ import javafx.scene.control.TextArea;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.stage.FileChooser;
-import javafx.stage.Stage;
-
 import java.io.*;
 import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
@@ -32,7 +30,8 @@ public class Combine {
     private final Clipboard clipboard ;
     private final ClipboardContent content;
 
-    public Combine (CommandInvoker cmdImvoker, TextArea textArea, int curPosit, Clipboard clipboard, ClipboardContent content,Originator originator,Caretaker caretaker, Memento m){
+    public Combine (CommandInvoker cmdImvoker, TextArea textArea, int curPosit, Clipboard clipboard,
+                    ClipboardContent content,Originator originator,Caretaker caretaker, Memento m){
         this.cmdImvoker = cmdImvoker;
         this.textArea = textArea;
         this.curPosi = curPosit;
@@ -49,9 +48,6 @@ public class Combine {
         chooser.setTitle("Choose location To Save Report");
         File selectedFile = null;
         selectedFile = chooser.showSaveDialog(null);
-//        while(selectedFile== null){
-//            selectedFile = chooser.showSaveDialog(null);
-//        }
 
         File file = new File(String.valueOf(selectedFile));
         PrintWriter outFile = null;
@@ -100,7 +96,9 @@ public class Combine {
         tems = textArea.getText();
         deleteIndex = textArea.getCaretPosition();
         if (deleteIndex >= 0) {
-            textArea.setText(tems.substring(0,deleteIndex) + tems.substring(deleteIndex+textArea.getSelectedText().length(),textArea.getLength()));//Retain text before the deleted char
+            textArea.setText(tems.substring(0,deleteIndex) +
+                    //Retain text before the deleted char
+                    tems.substring(deleteIndex+textArea.getSelectedText().length(),textArea.getLength()));
         }
         textArea.positionCaret(i);
     }
@@ -113,10 +111,6 @@ public class Combine {
         textArea.setText(String.valueOf(sb.insert(textArea.getCaretPosition(),clipboard.getString())));
         textArea.positionCaret(tmpCur+clipboard.getString().length());
     }
-
-    //Return to the state before the command do
-
-    //Return to the state before the command undo
 
     //Save Version at once
     public void saveVersion(){
@@ -138,9 +132,7 @@ public class Combine {
     }
 
     //Clean Style
-    public void cleanStyle(){
-        textArea.setStyle("");
-    }
+    public void cleanStyle(){textArea.setStyle("");}
 
     // set Bold Style
     public void setBold(){
@@ -181,7 +173,6 @@ public class Combine {
             @Override
             protected String call() throws Exception {
                 BufferedReader reader = new BufferedReader(new FileReader(fileToLoad));
-
                 //Use Files.lines() to calculate total lines - used for progress
                 long lineCount;
                 try (Stream<String> stream = Files.lines(fileToLoad.toPath())) {
@@ -197,11 +188,9 @@ public class Combine {
                     totalFile.append("\n");
                     updateProgress(++linesLoaded, lineCount);
                 }
-
                 return totalFile.toString();
             }
         };
-
         //If successful, update the text area, display a success message and store the loaded file reference
         loadFileTask.setOnSucceeded(workerStateEvent -> {
             try {
@@ -210,14 +199,11 @@ public class Combine {
                 textArea.setText("Could not load file from:\n " + fileToLoad.getAbsolutePath());
             }
         });
-
         //If unsuccessful, set text area with error message and status message to failed
         loadFileTask.setOnFailed(workerStateEvent -> {
             textArea.setText("Could not load file from:\n " + fileToLoad.getAbsolutePath());
         });
-
         return loadFileTask;
     }
-
 }
 

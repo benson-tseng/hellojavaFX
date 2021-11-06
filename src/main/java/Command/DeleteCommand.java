@@ -5,23 +5,14 @@ public class DeleteCommand implements Command{
 
     private Combine combine;
 
-    ////Let DeleteCommand's TextArea & curPosi equals to Controller
+    //Set Receiver
     public DeleteCommand (Combine combine){
         this.combine = combine;
     }
 
+    //Call Receiver to do
     public void execute(){
         combine.deleteCmd();
     }
-
-//    public void undo(){
-//        combine.delUndo();
-//    }
-//
-//    public boolean isReversible(){
-//
-//        return true;
-//
-//    }
 
 }

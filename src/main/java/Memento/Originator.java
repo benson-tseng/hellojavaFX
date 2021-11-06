@@ -1,13 +1,13 @@
 package Memento;
 
-
 public class Originator {
     private String textstates;
 
     public Originator (String textstates){
         this.textstates = textstates;
     }
-    //Set Memento
+
+    //Set textstates from memento
     public void restore(Memento m){
         this.textstates = m.getText();
     }

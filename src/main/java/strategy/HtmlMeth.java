@@ -15,7 +15,8 @@ public class HtmlMeth implements Meth{
             if (event.getCode() == KeyCode.PERIOD && event.isShiftDown()) {
                 for(int i = curPosi-2; i >= 0; i--){
                     if(textArea.getText().charAt(i)=='<'){
-                        textArea.setText(String.valueOf(sb.insert(textArea.getCaretPosition(),"</"+textArea.getText().subSequence(i+1, curPosi-1)+">")));
+                        textArea.setText(String.valueOf(sb.insert(textArea.getCaretPosition(),
+                                "</"+textArea.getText().subSequence(i+1, curPosi-1)+">")));
                         break;
                     }else if(textArea.getText().charAt(i) == '>'){
                         break;

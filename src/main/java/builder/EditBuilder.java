@@ -66,8 +66,3 @@ public class EditBuilder extends MenuBarBuilder{
         menuBar.getMenus().add(cMenu5.getMenu());
     }
 }
-
-//    CMenuItem undo = new CMenuItem("Undo","undo",combine,commandInvoker);
-//    CMenuItem redo = new CMenuItem("Redo","redo",combine,commandInvoker);
-//    cMenu3.add(undo);
-//    cMenu3.add(redo);
