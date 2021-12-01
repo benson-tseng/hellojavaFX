@@ -109,23 +109,23 @@ public class HelloController {
         caretaker.addMemento(m);
         context = new Context();
         CreateMenu();
-
-
         setListener();
-
     }
 
-    //test
-    public void CreateMenu() throws NoSuchMethodException {
+    // create menu
+    public void CreateMenu(){
         Director director = new Director();
         //Set MenuItem combine OnAction depends on which command the MenuItem is.
         combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
+        MenuBarBuilder readOnly = new ReadOnlyBuilder(combine,cmdInvoker,context);
         MenuBarBuilder edit = new EditBuilder(combine,cmdInvoker,context);
         director.setMenuBarBuilder(edit);
         director.constructMenuBar();
 
+        MenuBar tmpMenuBar = director.getMenuBar();
+
         for(int i = 0; i < director.getMenuBar().getMenus().size(); i++){
-            menuBar.getMenus().add(director.getMenuBar().getMenus().get(i));
+            menuBar.getMenus().add(tmpMenuBar.getMenus().get(i));
         }
 
         MFile = menuBar.getMenus().get(0);
