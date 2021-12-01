@@ -2,17 +2,17 @@ package Command;
 
 public class SaveVersion implements Command {
 
-    private Combine combine;
+    private Version version;
 
     //Set Receiver
-    public SaveVersion (Combine combine){
-        this.combine = combine;
+    public SaveVersion (Version version){
+        this.version = version;
     }
 
     //Call Receiver to do
     @Override
     public void execute() {
-        combine.saveVersion();
+        version.saveVersion();
     }
 
 }

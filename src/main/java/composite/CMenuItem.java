@@ -1,76 +1,81 @@
 package composite;
 
 import Command.*;
-import Command.Combine;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.scene.control.MenuItem;
 
 public class CMenuItem implements Option{
     private MenuItem menuItem;
-    private Combine combine;
+    private FileEdit fileEdit;
+    private TextEdit textEdit;
+    private Version version;
+    private FontStyle fontStyle;
     private CommandInvoker commandInvoker;
 
-    public CMenuItem(String text, String Id,Combine combine,CommandInvoker commandInvoker){
+    public CMenuItem(String text, String Id,FileEdit fileEdit,TextEdit textEdit,Version version,FontStyle fontStyle,CommandInvoker commandInvoker){
         this.menuItem = new MenuItem(text);
-        this.combine = combine;
+        this.fileEdit = fileEdit;
+        this.textEdit = textEdit;
+        this.version = version;
+        this.fontStyle = fontStyle;
         this.commandInvoker = commandInvoker;
         menuItem.setId(Id);
         menuItem.setOnAction(new EventHandler<ActionEvent>() {
             public void handle(ActionEvent event) {
                 switch (Id){
                     case "save_file":
-                        SaveCommand save = new SaveCommand(combine);
+                        SaveCommand save = new SaveCommand(fileEdit);
                         commandInvoker.execute(save);
                         break;
 
                     case "open_file":
-                        OpenCommand open = new OpenCommand(combine);
+                        OpenCommand open = new OpenCommand(fileEdit);
                         commandInvoker.execute(open);
                         break;
 
                     case "Delete":
-                        DeleteCommand del = new DeleteCommand(combine);
+                        DeleteCommand del = new DeleteCommand(textEdit);
                         commandInvoker.execute(del);
                         break;
 
                     case "Copy":
-                        CopyCommand copy = new CopyCommand(combine);
+                        CopyCommand copy = new CopyCommand(textEdit);
                         commandInvoker.execute(copy);
                         break;
 
                     case "Paste":
-                        PasteCommand paste = new PasteCommand(combine);
+                        PasteCommand paste = new PasteCommand(textEdit);
                         commandInvoker.execute(paste);
                         break;
 
                     case "SaveVersion":
-                        SaveVersion saveVersion = new SaveVersion(combine);
+                        SaveVersion saveVersion = new SaveVersion(version);
                         commandInvoker.execute(saveVersion);
                         break;
 
                     case "Previous":
-                        PreviousCommand previous = new PreviousCommand(combine);
+                        PreviousCommand previous = new PreviousCommand(version);
                         commandInvoker.execute(previous);
                         break;
 
                     case "Next":
-                        NextCommand next = new NextCommand(combine);
+                        NextCommand next = new NextCommand(version);
                         commandInvoker.execute(next);
                         break;
 
                     case "cleanStyle":
-                        CleanCommand clean = new CleanCommand(combine);
+                        CleanCommand clean = new CleanCommand(fontStyle);
                         commandInvoker.execute(clean);
                         break;
 
                     case "setBold":
-                        BoldCommand bold = new BoldCommand(combine);
+                        BoldCommand bold = new BoldCommand(fontStyle);
                         commandInvoker.execute(bold);
                         break;
 
                     case "setBlue":
-                        BlueCommand blue = new BlueCommand(combine);
+                        BlueCommand blue = new BlueCommand(fontStyle);
                         commandInvoker.execute(blue);
                         break;
                 }

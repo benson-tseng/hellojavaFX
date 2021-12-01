@@ -2,17 +2,17 @@ package Command;
 
 public class OpenCommand implements Command{
 
-    private Combine combine;
+    private FileEdit fileEdit;
 
     //Set Receiver
-    public OpenCommand (Combine combine){
-        this.combine = combine;
+    public OpenCommand (FileEdit fileEdit){
+        this.fileEdit = fileEdit;
     }
 
     //Call Receiver to do
     @Override
     public void execute() {
-        combine.openCmd();
+        fileEdit.openCmd();
     }
 
 }

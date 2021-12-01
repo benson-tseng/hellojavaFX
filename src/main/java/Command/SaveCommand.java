@@ -1,16 +1,16 @@
 package Command;
 
 public class SaveCommand implements Command{
-    private Combine combine;
+    private FileEdit fileEdit;
 
     //Set Receiver
-    public SaveCommand (Combine combine) {
-        this.combine = combine;
+    public SaveCommand (FileEdit fileEdit) {
+        this.fileEdit = fileEdit;
     }
 
     //Call Receiver to do
     @Override
     public void execute() {
-        combine.saveCmd();
+        fileEdit.saveCmd();
     }
 }

@@ -1,17 +1,17 @@
 package Command;
 
 public class CleanCommand implements Command {
-    private Combine combine;
+    private FontStyle fontStyle;
 
     //Set Receiver
-    public CleanCommand(Combine combine){
-        this.combine = combine;
+    public CleanCommand(FontStyle fontStyle){
+        this.fontStyle = fontStyle;
     }
 
     //Call Receiver to do
     @Override
     public void execute() {
-        combine.cleanStyle();
+        fontStyle.cleanStyle();
     }
 
 }

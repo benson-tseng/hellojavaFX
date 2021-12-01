@@ -2,17 +2,17 @@ package Command;
 
 public class CopyCommand implements Command{
 
-    private Combine combine;
+    private TextEdit textEdit;
 
     //Set Receiver
-    public CopyCommand(Combine combine){
-        this.combine = combine;
+    public CopyCommand(TextEdit textEdit){
+        this.textEdit = textEdit;
     }
 
     //Call Receiver to do
     @Override
     public void execute() {
-        combine.copyCmd();
+        textEdit.copyCmd();
     }
 
 }

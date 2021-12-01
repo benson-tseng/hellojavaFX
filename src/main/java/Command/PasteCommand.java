@@ -1,16 +1,16 @@
 package Command;
 
 public class PasteCommand implements Command{
-    private Combine combine;
+    private TextEdit textEdit;
 
     //Set Receiver
-    public PasteCommand(Combine combine){
-        this.combine = combine;
+    public PasteCommand(TextEdit textEdit){
+        this.textEdit = textEdit;
     }
 
     //Call Receiver to do
     @Override
     public void execute() {
-        combine.pasteCmd();
+        textEdit.pasteCmd();
     }
 }

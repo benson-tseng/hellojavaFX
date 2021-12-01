@@ -77,7 +77,10 @@ public class HelloController {
     // CommandInvoker use to invoke command;
     private CommandInvoker cmdInvoker;
 
-    private Combine combine;
+    private FileEdit fileEdit;
+    private TextEdit textEdit;
+    private Version version;
+    private FontStyle fontStyle;
 
     // Memento participant
     private Originator originator;
@@ -116,9 +119,12 @@ public class HelloController {
     public void CreateMenu(){
         Director director = new Director();
         //Set MenuItem combine OnAction depends on which command the MenuItem is.
-        combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
-        MenuBarBuilder readOnly = new ReadOnlyBuilder(combine,cmdInvoker,context);
-        MenuBarBuilder edit = new EditBuilder(combine,cmdInvoker,context);
+        fileEdit = new FileEdit(textArea);
+        textEdit = new TextEdit(textArea,clipboard,content);
+        version = new Version(originator,m,caretaker,textArea);
+        fontStyle = new FontStyle(textArea);
+        MenuBarBuilder readOnly = new ReadOnlyBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
+        MenuBarBuilder edit = new EditBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
         director.setMenuBarBuilder(edit);
         director.constructMenuBar();
 
@@ -266,12 +272,15 @@ public class HelloController {
         }
 
         //Set MenuItem combine OnAction depends on which command the MenuItem is.
-        combine = new Combine(cmdInvoker,textArea,curPosi,clipboard,content,originator,caretaker,m);
+        fileEdit = new FileEdit(textArea);
+        textEdit = new TextEdit(textArea,clipboard,content);
+        version = new Version(originator,m,caretaker,textArea);
+        fontStyle = new FontStyle(textArea);
         if (context.getState() == editState){
             Director director = new Director();
             System.out.println(1);
             System.out.println(textArea.getCaretPosition());
-            MenuBarBuilder edit = new EditBuilder(combine,cmdInvoker,context);
+            MenuBarBuilder edit = new EditBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
             director.setMenuBarBuilder(edit);
             director.constructMenuBar();
 
@@ -310,7 +319,7 @@ public class HelloController {
             Director director = new Director();
             System.out.println(1);
             System.out.println(textArea.getCaretPosition());
-            MenuBarBuilder read = new ReadOnlyBuilder(combine,cmdInvoker,context);
+            MenuBarBuilder read = new ReadOnlyBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
             director.setMenuBarBuilder(read);
             director.constructMenuBar();
 

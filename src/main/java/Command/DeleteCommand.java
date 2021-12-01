@@ -3,16 +3,16 @@ package Command;
 
 public class DeleteCommand implements Command{
 
-    private Combine combine;
+    private TextEdit textEdit;
 
     //Set Receiver
-    public DeleteCommand (Combine combine){
-        this.combine = combine;
+    public DeleteCommand (TextEdit textEdit){
+        this.textEdit = textEdit;
     }
 
     //Call Receiver to do
     public void execute(){
-        combine.deleteCmd();
+        textEdit.deleteCmd();
     }
 
 }

@@ -1,17 +1,17 @@
 package Command;
 
 public class BlueCommand implements Command{
-    private Combine combine;
+    private FontStyle fontStyle;
 
     //Set Receiver
-    public BlueCommand (Combine combine){
-        this.combine = combine;
+    public BlueCommand (FontStyle fontStyle){
+        this.fontStyle = fontStyle;
     }
 
     //Call Receiver to do
     @Override
     public void execute() {
-        combine.setBlue();
+        fontStyle.setBlue();
     }
 
 }
