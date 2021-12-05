@@ -1,22 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import javafx.scene.layout.VBox?>
-<?import javafx.scene.control.TextArea?>
-<?import javafx.scene.control.MenuBar?>
-<?import javafx.scene.control.Menu?>
-<?import javafx.scene.control.MenuItem?>
-<?import javafx.scene.control.SeparatorMenuItem?>
-<?import javafx.scene.text.Text?>
-<?import javafx.scene.control.ChoiceBox?>
-<?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.Button?>
-<?import javafx.scene.layout.HBox?>
-<?import javafx.scene.layout.Pane?>
 <?import javafx.geometry.Insets?>
+<?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.MenuBar?>
+<?import javafx.scene.control.TextArea?>
+<?import javafx.scene.control.TextField?>
 <?import javafx.scene.control.ToggleButton?>
 <?import javafx.scene.control.ToggleGroup?>
-<VBox fx:id="vBox" prefHeight="700.0" prefWidth="1000" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellojavafx.HelloController">
+<?import javafx.scene.layout.HBox?>
+<?import javafx.scene.layout.Pane?>
+<?import javafx.scene.layout.VBox?>
+<?import javafx.scene.text.Font?>
+<?import javafx.scene.text.Text?>
+
+<VBox fx:id="vBox" prefHeight="700.0" prefWidth="1000" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellojavafx.HelloController">
     <children>
         <MenuBar fx:id="menuBar">
         </MenuBar>
@@ -24,27 +22,30 @@
             <VBox.margin>
                 <Insets left="10.0" right="10.0" />
             </VBox.margin>
-            <TextField fx:id="searchKeyWord"></TextField>
-            <Button fx:id="search" text="Search" onAction="#searchWord"></Button>
+            <TextField fx:id="searchKeyWord" />
+            <Button fx:id="search" onAction="#searchWord" text="Search" />
             <Pane HBox.hgrow="ALWAYS"><children>
-            <ToggleButton fx:id="buttonEditor" layoutX="68.0" mnemonicParsing="false" onAction="#toggleButton" text="Editor">
+            <ToggleButton fx:id="buttonJake" layoutX="68.0" mnemonicParsing="false" onAction="#toggleButton" text="Jake">
                 <toggleGroup>
                     <ToggleGroup fx:id="buttons" />
                 </toggleGroup>
             </ToggleButton>
-            <ToggleButton fx:id="buttonReader" layoutX="118.0" mnemonicParsing="false" onAction="#toggleButton" text="Reader" toggleGroup="$buttons" />
+            <ToggleButton fx:id="buttonFinn" layoutX="118.0" mnemonicParsing="false" onAction="#toggleButton" text="Finn" toggleGroup="$buttons" />
         </children></Pane>
-            <Text fx:id="useMeth"  />
+            <Text fx:id="useMeth" />
         </HBox>
         <HBox spacing="30">
             <VBox.margin>
                 <Insets left="10.0" right="10.0" />
             </VBox.margin>
-            <ComboBox fx:id="chooseWord" maxHeight="200"></ComboBox>
+            <ComboBox fx:id="chooseWord" maxHeight="200" />
             <Text fx:id="resultNum">0 Record</Text>
             <Pane HBox.hgrow="ALWAYS" />
         </HBox>
-        <TextArea fx:id="textArea" prefHeight="600.0" />
+        <TextArea fx:id="textArea" prefHeight="600.0">
+         <font>
+            <Font size="10.0" />
+         </font></TextArea>
         <HBox spacing="30">
             <VBox.margin>
                 <Insets left="10.0" right="10.0" />

@@ -1,6 +1,7 @@
 package com.example.hellojavafx;
 
 import Command.*;
+import Prototype.Prototype;
 import builder.Director;
 import builder.EditBuilder;
 import builder.MenuBarBuilder;
@@ -34,6 +35,8 @@ import Memento.Originator;
 import State.ReadState;
 import State.EditState;
 import State.Context;
+import Prototype.JakeEmoji;
+import Prototype.FinnEmoji;
 
 
 public class HelloController {
@@ -55,10 +58,10 @@ public class HelloController {
     private TextArea textArea;
 
     @FXML
-    private ToggleButton buttonEditor;
+    private ToggleButton buttonJake;
 
     @FXML
-    private ToggleButton buttonReader;
+    private ToggleButton buttonFinn;
 
     @FXML
     private Text useMeth,
@@ -98,6 +101,9 @@ public class HelloController {
     ReadState readState = new ReadState();
     private Stage stage;
 
+    private JakeEmoji jakeEmoji;
+    private FinnEmoji finnEmoji;
+
     public void initialize() throws NoSuchMethodException {
         textArea.setWrapText(true);
         useMeth.setText("Doc Edit Mode");
@@ -110,6 +116,8 @@ public class HelloController {
         caretaker = new Caretaker();
         m = originator.snapshot();
         caretaker.addMemento(m);
+        jakeEmoji = new JakeEmoji();
+        finnEmoji = new FinnEmoji();
         context = new Context();
         CreateMenu();
         setListener();
@@ -260,86 +268,94 @@ public class HelloController {
         this.meth = meth;
     }
 
-    // Change to Editor or Reader
-    public void toggleButton(ActionEvent actionEvent){
-        menuBar.getMenus().clear();
-        if (actionEvent.getSource() == buttonEditor) {
-            editState.doAction(context);
-
-        } else if (actionEvent.getSource() == buttonReader) {
-            readState.doAction(context);
-
+    // Print Emoji
+    public void toggleButton(ActionEvent actionEvent) {
+        if (actionEvent.getSource() == buttonJake) {
+            Prototype p = jakeEmoji.clone();
+            textArea.setText(p.getEmoji());
+            System.out.println("jake");
+        } else if (actionEvent.getSource() == buttonFinn) {
+            Prototype p = finnEmoji.clone();
+            textArea.setText(p.getEmoji());
+            System.out.println("finn");
         }
-
-        //Set MenuItem combine OnAction depends on which command the MenuItem is.
-        fileEdit = new FileEdit(textArea);
-        textEdit = new TextEdit(textArea,clipboard,content);
-        version = new Version(originator,m,caretaker,textArea);
-        fontStyle = new FontStyle(textArea);
-        if (context.getState() == editState){
-            Director director = new Director();
-            System.out.println(1);
-            System.out.println(textArea.getCaretPosition());
-            MenuBarBuilder edit = new EditBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
-            director.setMenuBarBuilder(edit);
-            director.constructMenuBar();
-
-            for(int i = 0; i < director.getMenuBar().getMenus().size(); i++){
-                menuBar.getMenus().add(director.getMenuBar().getMenus().get(i));
-            }
-
-            MFile = menuBar.getMenus().get(0);
-            MEditMethod = menuBar.getMenus().get(1);
-            MTextEdit = menuBar.getMenus().get(2);
-            MVersion = menuBar.getMenus().get(3);
-            MStyle = menuBar.getMenus().get(4);
-            textArea.setEditable(true);
-
-            MEditMethod.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    setDocMeth();
-                }
-            });
-
-            MEditMethod.getItems().get(1).setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    setCodeMeth();
-                }
-            });
-
-            MEditMethod.getItems().get(2).setOnAction(new EventHandler<ActionEvent>() {
-                @Override
-                public void handle(ActionEvent event) {
-                    setHtmlMeth();
-                }
-            });
-        } else if (context.getState() == readState){
-            Director director = new Director();
-            System.out.println(1);
-            System.out.println(textArea.getCaretPosition());
-            MenuBarBuilder read = new ReadOnlyBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
-            director.setMenuBarBuilder(read);
-            director.constructMenuBar();
-
-            for(int i = 0; i < director.getMenuBar().getMenus().size(); i++){
-                menuBar.getMenus().add(director.getMenuBar().getMenus().get(i));
-            }
-
-            MFile = menuBar.getMenus().get(0);
-            textArea.setEditable(false);
-        }
-
-        //Close the window
-        MFile.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
-            @Override
-            public void handle(ActionEvent event) {
-                stage.close();
-            }
-        });
     }
-
 }
 
-
+//menuBar.getMenus().clear();
+//        if (actionEvent.getSource() == buttonEditor) {
+//        editState.doAction(context);
+//
+//    } else if (actionEvent.getSource() == buttonReader) {
+//        readState.doAction(context);
+//
+//    }
+//
+//    //Set MenuItem combine OnAction depends on which command the MenuItem is.
+//    fileEdit = new FileEdit(textArea);
+//    textEdit = new TextEdit(textArea,clipboard,content);
+//    version = new Version(originator,m,caretaker,textArea);
+//    fontStyle = new FontStyle(textArea);
+//        if (context.getState() == editState){
+//        Director director = new Director();
+//        System.out.println(1);
+//        System.out.println(textArea.getCaretPosition());
+//        MenuBarBuilder edit = new EditBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
+//        director.setMenuBarBuilder(edit);
+//        director.constructMenuBar();
+//
+//        for(int i = 0; i < director.getMenuBar().getMenus().size(); i++){
+//            menuBar.getMenus().add(director.getMenuBar().getMenus().get(i));
+//        }
+//
+//        MFile = menuBar.getMenus().get(0);
+//        MEditMethod = menuBar.getMenus().get(1);
+//        MTextEdit = menuBar.getMenus().get(2);
+//        MVersion = menuBar.getMenus().get(3);
+//        MStyle = menuBar.getMenus().get(4);
+//        textArea.setEditable(true);
+//
+//        MEditMethod.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                setDocMeth();
+//            }
+//        });
+//
+//        MEditMethod.getItems().get(1).setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                setCodeMeth();
+//            }
+//        });
+//
+//        MEditMethod.getItems().get(2).setOnAction(new EventHandler<ActionEvent>() {
+//            @Override
+//            public void handle(ActionEvent event) {
+//                setHtmlMeth();
+//            }
+//        });
+//    } else if (context.getState() == readState){
+//        Director director = new Director();
+//        System.out.println(1);
+//        System.out.println(textArea.getCaretPosition());
+//        MenuBarBuilder read = new ReadOnlyBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
+//        director.setMenuBarBuilder(read);
+//        director.constructMenuBar();
+//
+//        for(int i = 0; i < director.getMenuBar().getMenus().size(); i++){
+//            menuBar.getMenus().add(director.getMenuBar().getMenus().get(i));
+//        }
+//
+//        MFile = menuBar.getMenus().get(0);
+//        textArea.setEditable(false);
+//    }
+//
+//    //Close the window
+//        MFile.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
+//        @Override
+//        public void handle(ActionEvent event) {
+//            stage.close();
+//        }
+//    });
+//}
