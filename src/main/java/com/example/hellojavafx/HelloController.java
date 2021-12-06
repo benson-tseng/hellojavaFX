@@ -223,6 +223,7 @@ public class HelloController {
             }
             resultNum.setText(countResult + " Record");
         }else{
+            chooseWord.getItems().clear();
             resultNum.setText("Insert the keyword!");
         }
     }
