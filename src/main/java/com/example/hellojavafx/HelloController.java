@@ -8,6 +8,7 @@ import builder.MenuBarBuilder;
 import builder.ReadOnlyBuilder;
 import interator.IntSet;
 import interator.Iterator;
+import interpreter.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
 import javafx.event.ActionEvent;
@@ -38,12 +39,15 @@ import State.Context;
 import Prototype.JakeEmoji;
 import Prototype.FinnEmoji;
 
+import java.util.Set;
+
 
 public class HelloController {
     // document edit method
     private Meth meth;
     private Scene scene;
     private IntSet intSet;
+    private IContext iContext;
 
     private Menu MFile;
     private Menu MEditMethod;
@@ -65,8 +69,8 @@ public class HelloController {
 
     @FXML
     private Text useMeth,
-    resultNum,
-    totalTextNum;
+            resultNum,
+            totalTextNum;
 
     @FXML
     private ComboBox chooseWord;
@@ -94,7 +98,8 @@ public class HelloController {
     private Context context;
 
     // Copy & Paste need to use
-    private final Clipboard clipboard = Clipboard.getSystemClipboard();;
+    private final Clipboard clipboard = Clipboard.getSystemClipboard();
+    ;
     private final ClipboardContent content = new ClipboardContent();
 
     EditState editState = new EditState();
@@ -124,21 +129,21 @@ public class HelloController {
     }
 
     // create menu
-    public void CreateMenu(){
+    public void CreateMenu() {
         Director director = new Director();
         //Set MenuItem combine OnAction depends on which command the MenuItem is.
         fileEdit = new FileEdit(textArea);
-        textEdit = new TextEdit(textArea,clipboard,content);
-        version = new Version(originator,m,caretaker,textArea);
+        textEdit = new TextEdit(textArea, clipboard, content);
+        version = new Version(originator, m, caretaker, textArea);
         fontStyle = new FontStyle(textArea);
-        MenuBarBuilder readOnly = new ReadOnlyBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
-        MenuBarBuilder edit = new EditBuilder(fileEdit,textEdit,version,fontStyle,cmdInvoker,context);
+        MenuBarBuilder readOnly = new ReadOnlyBuilder(fileEdit, textEdit, version, fontStyle, cmdInvoker, context);
+        MenuBarBuilder edit = new EditBuilder(fileEdit, textEdit, version, fontStyle, cmdInvoker, context);
         director.setMenuBarBuilder(edit);
         director.constructMenuBar();
 
         MenuBar tmpMenuBar = director.getMenuBar();
 
-        for(int i = 0; i < director.getMenuBar().getMenus().size(); i++){
+        for (int i = 0; i < director.getMenuBar().getMenus().size(); i++) {
             menuBar.getMenus().add(tmpMenuBar.getMenus().get(i));
         }
 
@@ -177,16 +182,12 @@ public class HelloController {
         });
 
 
-
-
-
-
     }
 
     // count total text method
-    public void totalText(){
+    public void totalText() {
         TextLength textLength = new TextLength();
-        TextObserver viewer = new TextObserver("viewer",textArea,totalTextNum);
+        TextObserver viewer = new TextObserver("viewer", textArea, totalTextNum);
         viewer.subscribe(textLength);
         this.scene.addEventFilter(KeyEvent.KEY_RELEASED, (KeyEvent event) -> {
             textLength.inform();
@@ -194,78 +195,129 @@ public class HelloController {
     }
 
     // set menu's option select listener
-    public void setListener(){
+    public void setListener() {
         chooseWord.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
-                textArea.selectRange(intSet.getIntAt((Integer) number2),intSet.getIntAt((Integer) number2)+searchKeyWord.getLength());
+                if (searchKeyWord.getText().charAt(0) == '^' || searchKeyWord.getText().charAt(searchKeyWord.getLength() - 1) == '$') {
+//                    System.out.println((Integer) iContext.getSeqList().get((Integer) number2));
+//                    System.out.println((Integer) iContext.getSeqList().get((Integer) number2)+(iContext.getMap().get(iContext.getSeqList().get((Integer) number2))).toString().length());
+                    textArea.selectRange((Integer) iContext.getSeqList().get((Integer) number2), (Integer) iContext.getSeqList().get((Integer) number2)+(iContext.getMap().get(iContext.getSeqList().get((Integer) number2))).toString().length());
+                } else {
+                    textArea.selectRange(intSet.getIntAt((Integer) number2), intSet.getIntAt((Integer) number2) + searchKeyWord.getLength());
+                }
             }
         });
     }
 
     // search word method
-    public void searchWord(){
-        if(this.searchKeyWord.getText() != ""){
-            StringBuffer sb = new StringBuffer(textArea.getText());
-            this.intSet = new IntSet(1000);
-            for(int i = 0; i <= this.textArea.getLength()-this.searchKeyWord.getLength();i++){
-                if(sb.substring(i,i+this.searchKeyWord.getLength()).equals(this.searchKeyWord.getText())){
-                    intSet.appendInt(i);
+    public void searchWord() {
+        if (this.searchKeyWord.getText() != "") {
+            // use regexp search
+            if (this.searchKeyWord.getText().charAt(0) == '^' && this.searchKeyWord.getText().substring(1, 2).matches("[a-zA-Z]") || this.searchKeyWord.getText().charAt(this.searchKeyWord.getLength() - 1) == '$' && this.searchKeyWord.getText().substring(this.searchKeyWord.getLength()-2,this.searchKeyWord.getLength()-1).matches("[a-zA-Z]")) {
+                iContext = new IContext(this.searchKeyWord.getText());
+                int tmpLength = 0;
+                for (int i = 0; i < this.textArea.getText().split(" ").length; i++) {
+                    iContext.addList(tmpLength);
+                    iContext.addMap(tmpLength, this.textArea.getText().split(" ")[i]);
+                    tmpLength += this.textArea.getText().split(" ")[i].length() + 1;
+                }
+                Expression expression = null;
+                int countResult;
+                // if search key word start with "^"
+                if(this.searchKeyWord.getText().charAt(0) == '^'){
+                    regSearch(new ExpressionImplS());
+                }
+                // if search key word start with "$"
+                if(this.searchKeyWord.getText().charAt(this.searchKeyWord.getLength() - 1) == '$'){
+                    regSearch(new ExpressionImplE());
+                }
+                // if search key word have another word inside except ^word and word$
+                if(this.searchKeyWord.getText().length()>4){
+                    regSearch(new ExpressionImplA());
+                }
+            } else {
+                // use general search
+                StringBuffer sb = new StringBuffer(textArea.getText());
+                this.intSet = new IntSet(1000);
+                for (int i = 0; i <= this.textArea.getLength() - this.searchKeyWord.getLength(); i++) {
+                    if (sb.substring(i, i + this.searchKeyWord.getLength()).equals(this.searchKeyWord.getText())) {
+                        intSet.appendInt(i);
+                    }
+                }
+                Iterator it = intSet.iterator();
+                int countResult = 0;
+                chooseWord.getItems().clear();
+                while (it.hasNext()) {
+                    countResult += 1;
+                    int i = (int) it.next();
+                    chooseWord.getItems().add("Record " + countResult);
+                }
+                if(countResult == 0){
+                    resultNum.setText("No Record");
+                }else{
+                    resultNum.setText(countResult + " Record");
                 }
             }
-            Iterator it = intSet.iterator();
-            int countResult = 0;
-            chooseWord.getItems().clear();
-            while (it.hasNext()) {
-                countResult+=1;
-                int i = (int)it.next();
-                chooseWord.getItems().add("Record "+countResult);
-            }
-            resultNum.setText(countResult + " Record");
-        }else{
+        } else {
             chooseWord.getItems().clear();
             resultNum.setText("Insert the keyword!");
         }
     }
 
+    public void regSearch(Expression expression){
+        int countResult = 0;
+        chooseWord.getItems().clear();
+        if(expression.interpret(this.searchKeyWord.getText(), iContext)){
+            for (int i = 0; i < iContext.getSeqList().size(); i++) {
+                countResult += 1;
+                chooseWord.getItems().add("Record " + countResult);
+
+            }
+            resultNum.setText(countResult + " Record");
+        }else{
+            resultNum.setText("No Record");
+        }
+    }
+
     // set scene which passed by Application
-    public void setScene(Scene scene){
+    public void setScene(Scene scene) {
         this.scene = scene;
     }
 
-    public void setStage(Stage stage){
+    public void setStage(Stage stage) {
         this.stage = stage;
     }
 
     // use edit as Document file
-    public void setDocMeth(){
+    public void setDocMeth() {
         chooseMeth(new DocMeth());
         useMeth("Doc Edit Mode");
     }
 
     // use edit as Code file
-    public void setCodeMeth(){
+    public void setCodeMeth() {
         chooseMeth(new CodeMeth());
         useMeth("Code Edit Mode");
     }
 
     // use edit as Html file
-    public void setHtmlMeth(){
+    public void setHtmlMeth() {
         chooseMeth(new HtmlMeth());
         useMeth("Html Edit Mode");
     }
 
     // init method & set current edit method
-    public void useMeth(String s){
-        if(meth == null){
+    public void useMeth(String s) {
+        if (meth == null) {
             meth = new DocMeth();
         }
-        meth.editMeth(scene,textArea);
+        meth.editMeth(scene, textArea);
         useMeth.setText(s);
     }
 
     // switch current method
-    public void chooseMeth(Meth meth){
+    public void chooseMeth(Meth meth) {
         this.meth = meth;
     }
 
