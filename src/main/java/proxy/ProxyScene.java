@@ -1,5 +1,6 @@
 package proxy;
 
+import javafx.scene.control.Label;
 import javafx.stage.Stage;
 
 import java.io.IOException;
@@ -13,10 +14,13 @@ public class ProxyScene extends Scene{
         pass = s2;
     }
 
-    public void navigate(Stage stage, javafx.scene.Scene scene) throws IOException {
+    public void navigate(Stage stage, javafx.scene.Scene scene, Label label) throws IOException {
         if(acc.equals("user") && pass.equals("user123")){
             this.scene = new RealScene();
-            this.scene.navigate(stage,scene);
+            this.scene.navigate(stage,scene,label);
+        }else{
+            label.setVisible(true);
+            label.setText("wrong acc or pass");
         }
     }
 }

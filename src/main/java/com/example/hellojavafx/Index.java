@@ -4,6 +4,7 @@ import com.example.hellojavafx.HelloApplication;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Scene;
+import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
 import javafx.stage.Stage;
@@ -24,9 +25,12 @@ public class Index {
     @FXML
     private PasswordField pass;
 
+    @FXML
+    private Label errmsg;
+
     public void login() throws IOException {
         proxy.Scene pScene = new ProxyScene(acc.getText(),pass.getText());
-        pScene.navigate(stage,scene);
+        pScene.navigate(stage,scene,errmsg);
     }
 
     public void setScene(Scene scene){

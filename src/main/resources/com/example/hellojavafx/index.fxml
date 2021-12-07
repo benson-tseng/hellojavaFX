@@ -9,7 +9,7 @@
 
 <AnchorPane prefHeight="312.0" prefWidth="504.0" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellojavafx.Index">
    <children>
-      <Button fx:id="login" layoutX="220.0" layoutY="246.0" mnemonicParsing="false" onAction="#login" prefHeight="36.0" prefWidth="67.0" text="login" defaultButton="true" />
+      <Button fx:id="login" defaultButton="true" layoutX="220.0" layoutY="246.0" mnemonicParsing="false" onAction="#login" prefHeight="36.0" prefWidth="67.0" text="login" />
       <Label layoutX="220.0" layoutY="32.0" text="login">
          <font>
             <Font size="28.0" />
@@ -27,5 +27,6 @@
          </font>
       </Label>
       <PasswordField fx:id="pass" layoutX="212.0" layoutY="171.0" prefHeight="23.0" prefWidth="171.0" />
+      <Label fx:id="errmsg" alignment="CENTER" contentDisplay="CENTER" layoutX="193.0" layoutY="212.0" prefHeight="15.0" prefWidth="122.0" text="Label" textAlignment="CENTER" textFill="RED" visible="false" />
    </children>
 </AnchorPane>
