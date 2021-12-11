@@ -1,7 +1,8 @@
 package com.example.hellojavafx;
 
 import Command.*;
-import Prototype.Prototype;
+import Prototype.Emoji;
+import Prototype.EmojiPrototype;
 import builder.Director;
 import builder.EditBuilder;
 import builder.MenuBarBuilder;
@@ -19,7 +20,6 @@ import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
-import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -36,10 +36,6 @@ import Memento.Originator;
 import State.ReadState;
 import State.EditState;
 import State.Context;
-import Prototype.JakeEmoji;
-import Prototype.FinnEmoji;
-
-import java.util.Set;
 
 
 public class HelloController {
@@ -106,8 +102,9 @@ public class HelloController {
     ReadState readState = new ReadState();
     private Stage stage;
 
-    private JakeEmoji jakeEmoji;
-    private FinnEmoji finnEmoji;
+    private EmojiPrototype finn;
+    private EmojiPrototype jake;
+    private Emoji emojis;
 
     public void initialize() throws NoSuchMethodException {
         textArea.setWrapText(true);
@@ -121,11 +118,97 @@ public class HelloController {
         caretaker = new Caretaker();
         m = originator.snapshot();
         caretaker.addMemento(m);
-        jakeEmoji = new JakeEmoji();
-        finnEmoji = new FinnEmoji();
         context = new Context();
         CreateMenu();
         setListener();
+        jake = new EmojiPrototype();
+        jake.setEmoji("＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　１１１１１１１１１１１１１１１１１１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　１１１　　　１１１１１　　　　　　　　　　１１１１１　　　１１１　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　１１　　　１１　　　　　　　　１１　　　１１　　　　１１１　　　　　　　１１　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　１１　　　　　１１　１１１１　１１　　　　　１１　　　１１１　　　　　　１１　１１　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　１１　　　１１１１　　　　１１１１　　　１１　　　　１１１　　　　　　１１　　　１１　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　１１１１１　　　１１１１　　　１１１１１　　　　１１１　　　　　　１１　　　　１１　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　１１１　　　　　　１１　　１１　１１　１１　　１１　　　　　　１１１　　　　１１　　　　　　１１　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　１１１　　　　　１１　　１１１１　　１１１１　　１１　　　　　１１１　　１１　　　　１１１１　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　１１１１１　　　　１１　　１１　　　１１　　　１１　　１１　　　　１１１１１　　　　１１　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　１１　　　　　　　　　　１１１　　　　　　　　　　　　１１１　　　　　　　　　　　　１１　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　１１　　　　１１１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１１１　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　１１　　　　１１　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　１１　　　１１　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　　１１　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　１１　　　１１１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　１１　　　１１１１　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　１１　　１１１１　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１　　１１１　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　１１１　　　　　　　１１１１１１　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　１１１　　　１１　　　　　　１１　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　　１１　　　　　１１　　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　１１　　　　１１　　　　　１１　　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　　　１１１１１　　　　　　　　１１１１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n" );
+        finn = new EmojiPrototype();
+        finn.setEmoji("＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n" +
+                "　　　　　　　　　　　　　１１１１１１１１１　　　　　　　　　　　　　　　　　　　１１１１１１１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　１１１　　　　　　　　　　　　　　　　　１１１　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　１１１１１１１１１１１１１１１１１１１１１１１　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　１１１１１１１１１１１１１１１１１１１１１　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　１１１１　　　１１１　　　　１１　　　　　　　　　　　　　　　　　　　１１　　　　１１１　　　１１１１　　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　　１１　　　　　　　　　　　　　　　　　　　　　１１　　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　１１　　　　●　　　　　　　　　　　　　●　　　　　１１　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　１１　　　　　　　　　　　　　　　　　　　　　　　１１　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　１１　　　　　　　　　　　　　　　　　　　　　　　１１　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　１１　　　　　　　＼＿＿＿＿＿＿＿／　　　　　　　１１　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　　１１　　　　　　　　　　　　　　　　　　　　　１１　　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　　　１１　　　　　　　　　　　　　　　　　　　１１　　　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　　　　１１１１１１１１１１１１１１１１１１１１１　　　　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　　１１　　　１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１　　　１１　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　１１１１１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１１１１１　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　１１１　　　　　　　　１１１１１１１１１　　　　　　　　１１１　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　１１１　　　１１１　　　　　　　　　１１１　　　１１１　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　１１　　　１１　　　　　　　　　　　１１　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　１１１１１　　　　　　　　　　　　　１１１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　１　１　　　　　　　　　　　　　　　１　１　　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　１　１　　　　　　　　　　　　　　　１　１　　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　　　　　　１　１　　　　　　　　　　　　　　　１　１　　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　１１１１１１　１　　　　　　　　　　　　　　　１　１１１１１１　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　１１　　　　　　１　　　　　　　　　　　　　　　１　　　　　　１１　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "　　　　　　　　　　　　　　　　１１１１１１１　　　　　　　　　　　　　　　　　１１１１１１１　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
+                "＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n");
+        emojis = new Emoji();
+        emojis.addPrototype("Finn",finn);
+        emojis.addPrototype("Jake",jake);
     }
 
     // create menu
@@ -322,14 +405,14 @@ public class HelloController {
     }
 
     // Print Emoji
-    public void toggleButton(ActionEvent actionEvent) {
+    public void toggleButton(ActionEvent actionEvent) throws CloneNotSupportedException {
         if (actionEvent.getSource() == buttonJake) {
-            Prototype p = jakeEmoji.clone();
-            textArea.setText(p.getEmoji());
+            EmojiPrototype jakePro = emojis.getPrototype("Jake");
+            textArea.setText(jakePro.getEmoji());
             System.out.println("jake");
         } else if (actionEvent.getSource() == buttonFinn) {
-            Prototype p = finnEmoji.clone();
-            textArea.setText(p.getEmoji());
+            EmojiPrototype finnPro = emojis.getPrototype("Finn");
+            textArea.setText(finnPro.getEmoji());
             System.out.println("finn");
         }
     }
