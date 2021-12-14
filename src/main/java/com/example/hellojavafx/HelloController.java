@@ -301,12 +301,18 @@ public class HelloController {
                 iContext = new IContext(this.searchKeyWord.getText());
                 int tmpLength = 0;
                 for (int i = 0; i < this.textArea.getText().split(" ").length; i++) {
-                    iContext.addList(tmpLength);
-                    iContext.addMap(tmpLength, this.textArea.getText().split(" ")[i]);
+                    if(this.textArea.getText().split(" ")[i].length() >= this.searchKeyWord.getText().length()-2){
+                        iContext.addList(tmpLength);
+                        iContext.addMap(tmpLength, this.textArea.getText().split(" ")[i]);
+                    }
                     tmpLength += this.textArea.getText().split(" ")[i].length() + 1;
                 }
+
+                System.out.println(iContext.getMap());
+
                 Expression expression = null;
                 int countResult;
+
                 // if search key word start with "^"
                 if(this.searchKeyWord.getText().charAt(0) == '^'){
                     regSearch(new ExpressionImplS());
