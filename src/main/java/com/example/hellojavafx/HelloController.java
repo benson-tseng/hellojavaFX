@@ -3,6 +3,10 @@ package com.example.hellojavafx;
 import Command.*;
 import Prototype.Emoji;
 import Prototype.EmojiPrototype;
+import bridge.ConcreteMailSender;
+import bridge.GoogleSMTPServer;
+import bridge.MailSender;
+import bridge.SMTPServer;
 import builder.Director;
 import builder.EditBuilder;
 import builder.MenuBarBuilder;
@@ -52,7 +56,10 @@ public class HelloController {
     private Menu MStyle;
 
     @FXML
-    private TextField searchKeyWord;
+    private Label sendMailMsg;
+
+    @FXML
+    private TextField searchKeyWord, inputEmail;
 
     @FXML
     private TextArea textArea;
@@ -157,7 +164,7 @@ public class HelloController {
                 "　　　　　　　　　　　　　　　　　　　　　　１１　　　　１１　　　　　１１　　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
                 "　　　　　　　　　　　　　　　　　　　　　　１１　　　　１１　　　　　１１　　　　１１　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
                 "　　　　　　　　　　　　　　　　　　　　　　　１１１１１　　　　　　　　１１１１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
-                "＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n" );
+                "＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n");
         finn = new EmojiPrototype();
         finn.setEmoji("＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n" +
                 "　　　　　　　　　　　　　１１１１１１１１１　　　　　　　　　　　　　　　　　　　１１１１１１１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
@@ -167,7 +174,7 @@ public class HelloController {
                 "　　　　　　　　　　　　　１１１　　　　　１１１１１１１１１１１１１１１１１１１１１　　　　　１１１　　　　　　　　　　　　　　　　　　　　＊\n" +
                 "　　　　　　１１１１　　　１１１　　　　１１　　　　　　　　　　　　　　　　　　　１１　　　　１１１　　　１１１１　　　　　　　　　　　　　＊\n" +
                 "　　　　　１１　　１１　　１１１　　　１１　　　　　　　　　　　　　　　　　　　　　１１　　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
-                "　　　　　１１　　１１　　１１１　　１１　　　　●　　　　　　　　　　　　　●　　　　　１１　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
+                "　　　　　１１　　１１　　１１１　　１１　　　　●　　　　　　　　　　　　　●　　　　１１　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
                 "　　　　　１１　　１１　　１１１　　１１　　　　　　　　　　　　　　　　　　　　　　　１１　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
                 "　　　　　１１　　１１　　１１１　　１１　　　　　　　　　　　　　　　　　　　　　　　１１　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
                 "　　　　　１１　　１１　　１１１　　１１　　　　　　　＼＿＿＿＿＿＿＿／　　　　　　　１１　　１１１　　１１　　１１　　　　　　　　　　　　＊\n" +
@@ -207,8 +214,48 @@ public class HelloController {
                 "　　　　　　　　　　　　　　　　１１１１１１１　　　　　　　　　　　　　　　　　１１１１１１１　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
                 "＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n");
         emojis = new Emoji();
-        emojis.addPrototype("Finn",finn);
-        emojis.addPrototype("Jake",jake);
+        emojis.addPrototype("Finn", finn);
+        emojis.addPrototype("Jake", jake);
+    }
+
+    // create setTimeout func like js have
+    public static void setTimeout(Runnable runnable, int delay) {
+        new Thread(() -> {
+            try {
+                Thread.sleep(delay);
+                runnable.run();
+            } catch (Exception e) {
+                System.err.println(e);
+            }
+        }).start();
+    }
+
+    // bridge sendMail function
+    public void sendMail() {
+        sendMailMsg.setStyle("-fx-text-fill: black;");
+        sendMailMsg.setText("sending email ...");
+        sendMailMsg.setVisible(true);
+
+        // let "sending email" msg set first, then execute send mail function
+        setTimeout(() -> {
+
+            // create google smtp server & set it as concrete mail sender
+            SMTPServer smtp = new GoogleSMTPServer();
+            MailSender m = new ConcreteMailSender(smtp);
+
+            // here fill in your gmail account & gmail application password
+            int response = m.sendMail("{{gmail_account}}", "{{gmail_application_password}}", this.inputEmail.getText(), this.textArea.getText());
+
+            if (response == 0) {
+                sendMailMsg.setText("fail to send mail");
+                sendMailMsg.setStyle("-fx-text-fill: red;");
+                sendMailMsg.setVisible(true);
+            } else if (response == 1) {
+                sendMailMsg.setText("Successes");
+                sendMailMsg.setStyle("-fx-text-fill: green;");
+                sendMailMsg.setVisible(true);
+            }
+        }, 0);
     }
 
     // create menu
@@ -283,9 +330,7 @@ public class HelloController {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 if (searchKeyWord.getText().charAt(0) == '^' || searchKeyWord.getText().charAt(searchKeyWord.getLength() - 1) == '$') {
-//                    System.out.println((Integer) iContext.getSeqList().get((Integer) number2));
-//                    System.out.println((Integer) iContext.getSeqList().get((Integer) number2)+(iContext.getMap().get(iContext.getSeqList().get((Integer) number2))).toString().length());
-                    textArea.selectRange((Integer) iContext.getSeqList().get((Integer) number2), (Integer) iContext.getSeqList().get((Integer) number2)+(iContext.getMap().get(iContext.getSeqList().get((Integer) number2))).toString().length());
+                    textArea.selectRange((Integer) iContext.getSeqList().get((Integer) number2), (Integer) iContext.getSeqList().get((Integer) number2) + (iContext.getMap().get(iContext.getSeqList().get((Integer) number2))).toString().length());
                 } else {
                     textArea.selectRange(intSet.getIntAt((Integer) number2), intSet.getIntAt((Integer) number2) + searchKeyWord.getLength());
                 }
@@ -296,33 +341,29 @@ public class HelloController {
     // search word method
     public void searchWord() {
         if (this.searchKeyWord.getText() != "") {
+            int countResult;
             // use regexp search
-            if (this.searchKeyWord.getText().charAt(0) == '^' && this.searchKeyWord.getText().substring(1, 2).matches("[a-zA-Z]") || this.searchKeyWord.getText().charAt(this.searchKeyWord.getLength() - 1) == '$' && this.searchKeyWord.getText().substring(this.searchKeyWord.getLength()-2,this.searchKeyWord.getLength()-1).matches("[a-zA-Z]")) {
+            if (this.searchKeyWord.getText().charAt(0) == '^' && this.searchKeyWord.getText().substring(1, 2).matches("[a-zA-Z]") || this.searchKeyWord.getText().charAt(this.searchKeyWord.getLength() - 1) == '$' && this.searchKeyWord.getText().substring(this.searchKeyWord.getLength() - 2, this.searchKeyWord.getLength() - 1).matches("[a-zA-Z]")) {
                 iContext = new IContext(this.searchKeyWord.getText());
                 int tmpLength = 0;
                 for (int i = 0; i < this.textArea.getText().split(" ").length; i++) {
-                    if(this.textArea.getText().split(" ")[i].length() >= this.searchKeyWord.getText().length()-2){
+                    if (this.textArea.getText().split(" ")[i].length() >= this.searchKeyWord.getText().length() - 2) {
                         iContext.addList(tmpLength);
                         iContext.addMap(tmpLength, this.textArea.getText().split(" ")[i]);
                     }
                     tmpLength += this.textArea.getText().split(" ")[i].length() + 1;
                 }
 
-                System.out.println(iContext.getMap());
-
-                Expression expression = null;
-                int countResult;
-
                 // if search key word start with "^"
-                if(this.searchKeyWord.getText().charAt(0) == '^'){
+                if (this.searchKeyWord.getText().charAt(0) == '^') {
                     regSearch(new ExpressionImplS());
                 }
                 // if search key word start with "$"
-                if(this.searchKeyWord.getText().charAt(this.searchKeyWord.getLength() - 1) == '$'){
+                if (this.searchKeyWord.getText().charAt(this.searchKeyWord.getLength() - 1) == '$') {
                     regSearch(new ExpressionImplE());
                 }
                 // if search key word have another word inside except ^word and word$
-                if(this.searchKeyWord.getText().length()>4){
+                if (this.searchKeyWord.getText().length() > 4) {
                     regSearch(new ExpressionImplA());
                 }
             } else {
@@ -335,16 +376,16 @@ public class HelloController {
                     }
                 }
                 Iterator it = intSet.iterator();
-                int countResult = 0;
+                countResult = 0;
                 chooseWord.getItems().clear();
                 while (it.hasNext()) {
                     countResult += 1;
                     int i = (int) it.next();
                     chooseWord.getItems().add("Record " + countResult);
                 }
-                if(countResult == 0){
+                if (countResult == 0) {
                     resultNum.setText("No Record");
-                }else{
+                } else {
                     resultNum.setText(countResult + " Record");
                 }
             }
@@ -354,17 +395,17 @@ public class HelloController {
         }
     }
 
-    public void regSearch(Expression expression){
+    public void regSearch(Expression expression) {
         int countResult = 0;
         chooseWord.getItems().clear();
-        if(expression.interpret(this.searchKeyWord.getText(), iContext)){
+        if (expression.interpret(this.searchKeyWord.getText(), iContext)) {
             for (int i = 0; i < iContext.getSeqList().size(); i++) {
                 countResult += 1;
                 chooseWord.getItems().add("Record " + countResult);
 
             }
             resultNum.setText(countResult + " Record");
-        }else{
+        } else {
             resultNum.setText("No Record");
         }
     }

@@ -4,6 +4,7 @@ module com.example.hellojavafx {
 
     requires org.kordamp.bootstrapfx.core;
     requires javafx.web;
+    requires java.mail;
 
     opens com.example.hellojavafx to javafx.fxml;
     exports com.example.hellojavafx;
