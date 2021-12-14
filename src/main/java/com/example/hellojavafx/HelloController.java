@@ -1,5 +1,9 @@
 package com.example.hellojavafx;
 
+import ChainOfResponsibility.CopyHandler;
+import ChainOfResponsibility.GeneralHandler;
+import ChainOfResponsibility.KeyHandler;
+import ChainOfResponsibility.PasteHandler;
 import Command.*;
 import Prototype.Emoji;
 import Prototype.EmojiPrototype;
@@ -113,6 +117,8 @@ public class HelloController {
     private EmojiPrototype jake;
     private Emoji emojis;
 
+    private KeyHandler handler;
+
     public void initialize() throws NoSuchMethodException {
         textArea.setWrapText(true);
         useMeth.setText("Doc Edit Mode");
@@ -127,6 +133,9 @@ public class HelloController {
         caretaker.addMemento(m);
         context = new Context();
         CreateMenu();
+        handler = new PasteHandler(new CopyHandler(new GeneralHandler(null)));
+        handler.setCmdInvoker(cmdInvoker);
+        handler.setTextEdit(textEdit);
         setListener();
         jake = new EmojiPrototype();
         jake.setEmoji("＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n" +
@@ -216,7 +225,17 @@ public class HelloController {
         emojis = new Emoji();
         emojis.addPrototype("Finn", finn);
         emojis.addPrototype("Jake", jake);
+
+        textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
+            @Override
+            public void handle(KeyEvent event) {
+                handler.toHandle(event);
+            }
+        });
     }
+
+    //Handle KeyEvent
+
 
     // create setTimeout func like js have
     public static void setTimeout(Runnable runnable, int delay) {
