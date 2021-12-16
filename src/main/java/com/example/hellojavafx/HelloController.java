@@ -263,7 +263,7 @@ public class HelloController {
             MailSender m = new ConcreteMailSender(smtp);
 
             // here fill in your gmail account & gmail application password
-            int response = m.sendMail("{{gmail_account}}", "{{gmail_application_password}}", this.inputEmail.getText(), this.textArea.getText());
+            int response = m.sendMail("google_acc", "google_application_pass", this.inputEmail.getText(), this.textArea.getText());
 
             if (response == 0) {
                 sendMailMsg.setText("fail to send mail");
@@ -348,6 +348,11 @@ public class HelloController {
         chooseWord.getSelectionModel().selectedIndexProperty().addListener(new ChangeListener<Number>() {
             @Override
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
+                // combo box default option is empty which index will be -1, it will cause the index out of bound error (ary[-1])
+                // so make the default option to 0
+                if(number2.toString().equals("-1")){
+                    number2 = 0;
+                }
                 if (searchKeyWord.getText().charAt(0) == '^' || searchKeyWord.getText().charAt(searchKeyWord.getLength() - 1) == '$') {
                     textArea.selectRange((Integer) iContext.getSeqList().get((Integer) number2), (Integer) iContext.getSeqList().get((Integer) number2) + (iContext.getMap().get(iContext.getSeqList().get((Integer) number2))).toString().length());
                 } else {
@@ -407,6 +412,7 @@ public class HelloController {
                 } else {
                     resultNum.setText(countResult + " Record");
                 }
+                this.chooseWord.getSelectionModel().select(0);
             }
         } else {
             chooseWord.getItems().clear();
@@ -427,6 +433,7 @@ public class HelloController {
         } else {
             resultNum.setText("No Record");
         }
+        this.chooseWord.getSelectionModel().select(0);
     }
 
     // set scene which passed by Application
