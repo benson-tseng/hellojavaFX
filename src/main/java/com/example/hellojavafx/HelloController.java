@@ -1,10 +1,11 @@
 package com.example.hellojavafx;
 
-import ChainOfResponsibility.CopyHandler;
 import ChainOfResponsibility.GeneralHandler;
 import ChainOfResponsibility.KeyHandler;
-import ChainOfResponsibility.PasteHandler;
+import ChainOfResponsibility.BoldHandler;
+import ChainOfResponsibility.BlueHandler;
 import Command.*;
+import Facade.OViewFacade;
 import Prototype.Emoji;
 import Prototype.EmojiPrototype;
 import bridge.ConcreteMailSender;
@@ -69,10 +70,13 @@ public class HelloController {
     private TextArea textArea;
 
     @FXML
-    private ToggleButton buttonJake;
+    private Button buttonJake;
 
     @FXML
-    private ToggleButton buttonFinn;
+    private Button buttonFinn;
+
+    @FXML
+    private Button buttonInit;
 
     @FXML
     private Text useMeth,
@@ -115,9 +119,12 @@ public class HelloController {
 
     private EmojiPrototype finn;
     private EmojiPrototype jake;
+    private EmojiPrototype pika;
     private Emoji emojis;
 
     private KeyHandler handler;
+
+    private OViewFacade oViewFacade;
 
     public void initialize() throws NoSuchMethodException {
         textArea.setWrapText(true);
@@ -132,10 +139,11 @@ public class HelloController {
         m = originator.snapshot();
         caretaker.addMemento(m);
         context = new Context();
+        oViewFacade = new OViewFacade(textArea,searchKeyWord,inputEmail,useMeth,resultNum,totalTextNum,meth,scene,chooseWord,sendMailMsg);
         CreateMenu();
-        handler = new PasteHandler(new CopyHandler(new GeneralHandler(null)));
+        handler = new BlueHandler (new BoldHandler(new GeneralHandler(null)));
         handler.setCmdInvoker(cmdInvoker);
-        handler.setTextEdit(textEdit);
+        handler.setFontStyle(fontStyle);
         setListener();
         jake = new EmojiPrototype();
         jake.setEmoji("＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n" +
@@ -477,18 +485,36 @@ public class HelloController {
         this.meth = meth;
     }
 
-    // Print Emoji
-    public void toggleButton(ActionEvent actionEvent) throws CloneNotSupportedException {
-        if (actionEvent.getSource() == buttonJake) {
-            EmojiPrototype jakePro = emojis.getPrototype("Jake");
-            textArea.setText(jakePro.getEmoji());
-            System.out.println("jake");
-        } else if (actionEvent.getSource() == buttonFinn) {
-            EmojiPrototype finnPro = emojis.getPrototype("Finn");
-            textArea.setText(finnPro.getEmoji());
-            System.out.println("finn");
-        }
+    // Print Emoji Finn
+    public void PrintFinn(ActionEvent actionEvent) throws CloneNotSupportedException{
+        EmojiPrototype finnPro = emojis.getPrototype("Finn");
+        textArea.setText(textArea.getText() + finnPro.getEmoji());
+        System.out.println("finn");
     }
+
+    // Print Emoji Finn
+    public void PrintJake(ActionEvent actionEvent) throws CloneNotSupportedException{
+        EmojiPrototype jakePro = emojis.getPrototype("Jake");
+        textArea.setText(textArea.getText() + jakePro.getEmoji());
+        System.out.println("finn");
+    }
+
+    // Init View
+    public void InitView(ActionEvent actionEvent) {
+        oViewFacade.init();
+    }
+
+//    public void toggleButton(ActionEvent actionEvent) throws CloneNotSupportedException {
+//        if (actionEvent.getSource() == buttonJake) {
+//            EmojiPrototype jakePro = emojis.getPrototype("Jake");
+//            textArea.setText(textArea.getText() + jakePro.getEmoji());
+//            System.out.println("jake");
+//        } else if (actionEvent.getSource() == buttonFinn) {
+//            EmojiPrototype finnPro = emojis.getPrototype("Finn");
+//            textArea.setText(textArea.getText() + finnPro.getEmoji());
+//            System.out.println("finn");
+//        }
+//    }
 }
 
 //menuBar.getMenus().clear();

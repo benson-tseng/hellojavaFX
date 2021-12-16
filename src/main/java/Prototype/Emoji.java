@@ -9,6 +9,7 @@ public class Emoji {
         prototypes.put(emoji,prototype);
     }
 
+    //Return the Prototype which the button click
     public EmojiPrototype getPrototype(String Emoji) throws CloneNotSupportedException {
         return (EmojiPrototype) prototypes.get(Emoji).clone();
     }

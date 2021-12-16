@@ -12,6 +12,7 @@ public class GeneralHandler extends KeyHandler{
         super(kHandler);
     }
 
+    //General type output
     @Override
     public void toHandle(KeyEvent event) {
         if(event.isControlDown() == false){

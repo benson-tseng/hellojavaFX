@@ -1,25 +1,19 @@
 <?xml version="1.0" encoding="UTF-8"?>
 
-<?import java.lang.*?>
-<?import javafx.geometry.*?>
-<?import javafx.scene.control.*?>
-<?import javafx.scene.layout.*?>
-<?import javafx.scene.text.*?>
 <?import javafx.geometry.Insets?>
 <?import javafx.scene.control.Button?>
 <?import javafx.scene.control.ComboBox?>
+<?import javafx.scene.control.Label?>
 <?import javafx.scene.control.MenuBar?>
 <?import javafx.scene.control.TextArea?>
 <?import javafx.scene.control.TextField?>
-<?import javafx.scene.control.ToggleButton?>
-<?import javafx.scene.control.ToggleGroup?>
 <?import javafx.scene.layout.HBox?>
 <?import javafx.scene.layout.Pane?>
 <?import javafx.scene.layout.VBox?>
 <?import javafx.scene.text.Font?>
 <?import javafx.scene.text.Text?>
 
-<VBox fx:id="vBox" prefHeight="700.0" prefWidth="1000" xmlns="http://javafx.com/javafx/8" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellojavafx.HelloController">
+<VBox fx:id="vBox" prefHeight="700.0" prefWidth="1000" xmlns="http://javafx.com/javafx/17" xmlns:fx="http://javafx.com/fxml/1" fx:controller="com.example.hellojavafx.HelloController">
     <children>
         <MenuBar fx:id="menuBar">
         </MenuBar>
@@ -32,14 +26,11 @@
                <Button fx:id="search" onAction="#searchWord" text="Search" />
                <Pane HBox.hgrow="ALWAYS">
                <children>
-               <ToggleButton fx:id="buttonJake" layoutX="276.0" mnemonicParsing="false" onAction="#toggleButton" text="Jake">
-                   <toggleGroup>
-                       <ToggleGroup fx:id="buttons" />
-                   </toggleGroup>
-               </ToggleButton>
-               <ToggleButton fx:id="buttonFinn" layoutX="336.0" mnemonicParsing="false" onAction="#toggleButton" text="Finn" toggleGroup="$buttons" />
                   <TextField fx:id="inputEmail" layoutX="16.0" promptText="type in your email" />
                   <Button fx:id="testBtn" layoutX="187.0" mnemonicParsing="false" onAction="#sendMail" text="Send" />
+                  <Button fx:id="buttonFinn" layoutX="334.0" mnemonicParsing="false" onAction="#PrintFinn" text="Finn" />
+                  <Button fx:id="buttonJake" layoutX="374.0" mnemonicParsing="false" onAction="#PrintJake" text="Jake" />
+                  <Label layoutX="291.0" layoutY="4.0" text="Emoji:" />
            </children>
             </Pane>
                <Text fx:id="useMeth" />
@@ -58,6 +49,7 @@
                      <font>
                         <Font size="14.0" />
                      </font></Label>
+                  <Button fx:id="buttonInit" layoutX="518.0" mnemonicParsing="false" onAction="#InitView" text="Init" />
                </children></Pane>
            </children>
         </HBox>

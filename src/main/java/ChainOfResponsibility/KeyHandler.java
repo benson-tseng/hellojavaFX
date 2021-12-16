@@ -1,14 +1,16 @@
 package ChainOfResponsibility;
 
 import Command.CommandInvoker;
+import Command.FontStyle;
 import Command.TextEdit;
 import javafx.scene.control.TextArea;
 import javafx.scene.input.KeyEvent;
 
 public abstract class KeyHandler {
 
-    protected KeyHandler kHandler;
+    private KeyHandler kHandler;
     private CommandInvoker commandInvoker;
+    private FontStyle fontStyle;
     private TextEdit textEdit;
 
     public KeyHandler (KeyHandler kHandler){
@@ -19,6 +21,8 @@ public abstract class KeyHandler {
 
         if (kHandler != null){
             kHandler.toHandle(event);
+            kHandler.setCmdInvoker(commandInvoker);
+            kHandler.setFontStyle(fontStyle);
         }
     }
 
@@ -26,17 +30,13 @@ public abstract class KeyHandler {
         this.commandInvoker = commandInvoker;
     }
 
-    public void setTextEdit(TextEdit textEdit){
-        this.textEdit = textEdit;
-    }
+    public void setFontStyle(FontStyle fontStyle) {this.fontStyle = fontStyle;}
 
     public CommandInvoker getCommandInvoker(){
-        return commandInvoker;
+        return this.commandInvoker;
     }
 
-    public TextEdit getTextEdit(){
-        return this.textEdit;
-    }
+    public FontStyle getFontStyle() {return this.fontStyle;}
 
     public abstract void toHandle(KeyEvent event);
 
