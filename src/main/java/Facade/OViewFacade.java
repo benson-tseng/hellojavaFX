@@ -2,12 +2,7 @@ package Facade;
 
 import State.Context;
 import State.EditState;
-import javafx.scene.Scene;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
-import javafx.scene.text.Text;
+import com.example.hellojavafx.HelloController;
 import strategy.DocMeth;
 import strategy.Meth;
 
@@ -15,48 +10,35 @@ import java.util.Timer;
 
 public class OViewFacade {
 
-    private TextArea textArea;
-    private TextField searchKeyWord, inputEmail;
-    private Text useMeth,resultNum,totalTextNum;
+    private HelloController helloController;
     private Meth meth;
-    private Scene scene;
-    private ComboBox chooseWord;
-    private Label sendMailMsg;
     private Context context;
     private Timer timer;
 
-    public OViewFacade (TextArea textArea, TextField searchKeyWord, TextField inputEmail, Text useMeth, Text resultNum,Text totalTextNum, Meth meth, Scene scene, ComboBox chooseWord,Label sendMailMsg,Context context,Timer timer){
-        this.textArea = textArea;
-        this.searchKeyWord = searchKeyWord;
-        this.inputEmail = inputEmail;
-        this.useMeth = useMeth;
-        this.resultNum = resultNum;
-        this.totalTextNum = totalTextNum;
+    public OViewFacade (HelloController helloController,Meth meth,Context context){
+        this.helloController = helloController;
         this.meth = meth;
-        this.scene = scene;
-        this.chooseWord = chooseWord;
-        this.sendMailMsg = sendMailMsg;
         this.context = context;
-        this.timer = timer;
+        this.timer = helloController.getTimer();
     }
 
     //Back to the beginning
     public void init (){
         timer = new Timer();
         context.setState(new EditState(context));
-        context.toEdit(textArea,90);
-        textArea.setEditable(true);
-        textArea.setText("");
-        textArea.setStyle("");
-        searchKeyWord.setText("");
-        inputEmail.setText("");
+        context.toEdit(helloController.getTextArea(), 90);
+        helloController.getTextArea().setEditable(true);
+        helloController.getTextArea().setText("");
+        helloController.getTextArea().setStyle("");
+        helloController.getSearchKeyWord().setText("");
+        helloController.getInputEmail().setText("");
         meth = new DocMeth();
-        meth.editMeth(scene,textArea);
-        useMeth.setText("Doc Edit Mode");
-        resultNum.setText("0 Record");
-        chooseWord.getItems().clear();
-        sendMailMsg.setText("");
-        totalTextNum.setText("Total 0 Word");
+        meth.editMeth(helloController.getScene(), helloController.getTextArea());
+        helloController.getUseMeth().setText("Doc Edit Mode");
+        helloController.getResultNum().setText("0 Record");
+        helloController.getChooseWord().getItems().clear();
+        helloController.getSendMailMsg().setText("");
+        helloController.getTotalTextNum().setText("Total 0 Word");
 
     }
 }
