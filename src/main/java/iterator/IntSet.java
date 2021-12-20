@@ -1,4 +1,4 @@
-package interator;
+package iterator;
 
 public class IntSet implements Set{
     private int[] intSet;

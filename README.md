@@ -17,4 +17,5 @@ project goal: implement 16 design pattern in text editor
 14. memento pattern (Charlie)
 15. state pattern  (Charlie)
 16. facade pattern (Charlie)
+
 good luck for all the student struggling in the Jenny Huang's courses :D

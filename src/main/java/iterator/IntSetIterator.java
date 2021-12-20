@@ -1,4 +1,4 @@
-package interator;
+package iterator;
 
 public class IntSetIterator implements Iterator{
     private IntSet intSet;

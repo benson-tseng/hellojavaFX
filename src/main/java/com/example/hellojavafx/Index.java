@@ -29,8 +29,23 @@ public class Index {
     private Label errmsg;
 
     public void login() throws IOException {
-        proxy.Scene pScene = new ProxyScene(acc.getText(),pass.getText());
-        pScene.navigate(stage,scene,errmsg);
+        errmsg.setText("");
+        if(acc.getText().length()<4 || acc.getText().length()>8){
+            errmsg.setVisible(true);
+            errmsg.setText("account must have 4 to 8 digit");
+        }
+        if(pass.getText().length()<4 || pass.getText().length()>8){
+            if(errmsg.getText().equals("")){
+                errmsg.setVisible(true);
+                errmsg.setText("password must have 4 to 8 digit");
+            }else{
+                errmsg.setText("account, password must have 4 to 8 digit");
+            }
+        }
+        if(errmsg.getText().equals("")){
+            proxy.Scene pScene = new ProxyScene(acc.getText(),pass.getText());
+            pScene.navigate(stage,scene,errmsg);
+        }
     }
 
     public void setScene(Scene scene){

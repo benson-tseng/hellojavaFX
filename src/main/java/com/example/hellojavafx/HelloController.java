@@ -16,8 +16,8 @@ import builder.Director;
 import builder.EditBuilder;
 import builder.MenuBarBuilder;
 import builder.ReadOnlyBuilder;
-import interator.IntSet;
-import interator.Iterator;
+import iterator.IntSet;
+import iterator.Iterator;
 import interpreter.*;
 import javafx.beans.value.ChangeListener;
 import javafx.beans.value.ObservableValue;
@@ -293,7 +293,7 @@ public class HelloController {
         }).start();
     }
 
-    // bridge sendMail function
+    // bridge pattern, sendMail function
     public void sendMail() {
         sendMailMsg.setStyle("-fx-text-fill: black;");
         sendMailMsg.setText("sending email ...");
@@ -321,7 +321,7 @@ public class HelloController {
         }, 0);
     }
 
-    // create menu
+    // composite,builder pattern create menu
     public void CreateMenu() {
         Director director = new Director();
         //Set MenuItem combine OnAction depends on which command the MenuItem is.
@@ -377,7 +377,7 @@ public class HelloController {
 
     }
 
-    // count total text method
+    // observer pattern, count total text method
     public void totalText() {
         TextLength textLength = new TextLength();
         TextObserver viewer = new TextObserver("viewer", textArea, totalTextNum);
@@ -406,7 +406,7 @@ public class HelloController {
         });
     }
 
-    // search word method
+    // iterator, interpreter pattern, search word method
     public void searchWord() {
         if (this.searchKeyWord.getText() != "") {
             int countResult;
@@ -507,7 +507,7 @@ public class HelloController {
         useMeth("Html Edit Mode");
     }
 
-    // init method & set current edit method
+    // strategy pattern, init method & set current edit method
     public void useMeth(String s) {
         if (meth == null) {
             meth = new DocMeth();
@@ -597,6 +597,7 @@ public class HelloController {
         return this.timer;
     }
 
+    // facade pattern
     public void init(){
         textArea.setEditable(true);
         textArea.setText("");

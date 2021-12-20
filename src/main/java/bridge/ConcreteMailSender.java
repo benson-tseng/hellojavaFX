@@ -2,10 +2,8 @@ package bridge;
 
 public class ConcreteMailSender extends MailSender{
 
-    SMTPServer smtp;
-
     public ConcreteMailSender(SMTPServer m){
-        smtp = m;
+        super(m);
     }
 
     @Override
