@@ -7,14 +7,19 @@ public class CommandInvoker {
     private static CommandInvoker commandInvoker;
 
     //Save command in stack;
-    private Stack<Command> usedStack = new Stack<Command>();;
-
+    private Stack<Command> usedStack = new Stack<Command>();
+    private Stack<Command> verStack = new Stack<Command>();
     private CommandInvoker(){
     }
 
     public void execute(Command cmd) {
         cmd.execute();
-        usedStack.push(cmd);
+        if (cmd.getType() == "edit"){
+            usedStack.push(cmd);
+        } else if (cmd.getType() == "ver"){
+            verStack.push(cmd);
+        }
+
     }
 
     public static CommandInvoker getInstance(){

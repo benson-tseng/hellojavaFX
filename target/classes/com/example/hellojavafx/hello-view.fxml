@@ -66,5 +66,6 @@
                <Text fx:id="totalTextNum">Total 0 Word</Text>
            </children>
         </HBox>
+      <Label fx:id="CurrentState" text="CurrentState" />
     </children>
 </VBox>

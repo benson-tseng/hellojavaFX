@@ -11,7 +11,6 @@ public abstract class KeyHandler {
     private KeyHandler kHandler;
     private CommandInvoker commandInvoker;
     private FontStyle fontStyle;
-    private TextEdit textEdit;
 
     public KeyHandler (KeyHandler kHandler){
         this.kHandler = kHandler;

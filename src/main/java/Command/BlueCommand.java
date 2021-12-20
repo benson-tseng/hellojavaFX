@@ -14,4 +14,8 @@ public class BlueCommand implements Command{
         fontStyle.setBlue();
     }
 
+    @Override
+    public String getType() {
+        return "edit";
+    }
 }

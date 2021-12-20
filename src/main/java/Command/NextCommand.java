@@ -14,4 +14,10 @@ public class NextCommand implements Command{
         version.next();
     }
 
+    @Override
+    public String getType() {
+        return "ver";
+    }
+
+
 }

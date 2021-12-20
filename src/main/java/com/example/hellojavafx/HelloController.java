@@ -29,6 +29,7 @@ import javafx.scene.control.*;
 import javafx.scene.input.Clipboard;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.input.MouseEvent;
 import javafx.scene.text.Font;
 import javafx.scene.text.FontWeight;
 import javafx.scene.text.Text;
@@ -45,6 +46,9 @@ import Memento.Originator;
 import State.ReadState;
 import State.EditState;
 import State.Context;
+
+import java.util.Timer;
+import java.util.TimerTask;
 
 
 public class HelloController {
@@ -92,6 +96,9 @@ public class HelloController {
     @FXML
     private MenuBar menuBar;
 
+    @FXML
+    private Label CurrentState;
+
     // CommandInvoker use to invoke command;
     private CommandInvoker cmdInvoker;
 
@@ -105,7 +112,8 @@ public class HelloController {
     private Caretaker caretaker;
     private Memento m;
 
-    // An outwindow
+    private boolean trigger;
+
     private Context context;
 
     // Copy & Paste need to use
@@ -113,9 +121,14 @@ public class HelloController {
     ;
     private final ClipboardContent content = new ClipboardContent();
 
-    EditState editState = new EditState();
-    ReadState readState = new ReadState();
     private Stage stage;
+
+    private int time;
+
+    private Timer timer;
+
+    private EditState editState;
+    private ReadState readState;
 
     private EmojiPrototype finn;
     private EmojiPrototype jake;
@@ -127,6 +140,8 @@ public class HelloController {
     private OViewFacade oViewFacade;
 
     public void initialize() throws NoSuchMethodException {
+        trigger = true;
+        timer = new Timer();
         textArea.setWrapText(true);
         useMeth.setText("Doc Edit Mode");
         useMeth.setFont(Font.font(null, FontWeight.BLACK, 15));
@@ -139,7 +154,7 @@ public class HelloController {
         m = originator.snapshot();
         caretaker.addMemento(m);
         context = new Context();
-        oViewFacade = new OViewFacade(textArea,searchKeyWord,inputEmail,useMeth,resultNum,totalTextNum,meth,scene,chooseWord,sendMailMsg);
+        oViewFacade = new OViewFacade(this,meth,context);
         CreateMenu();
         handler = new BlueHandler (new BoldHandler(new GeneralHandler(null)));
         handler.setCmdInvoker(cmdInvoker);
@@ -234,10 +249,31 @@ public class HelloController {
         emojis.addPrototype("Finn", finn);
         emojis.addPrototype("Jake", jake);
 
+        textArea.setOnMouseClicked(new EventHandler<MouseEvent>() {
+            @Override
+            public void handle(MouseEvent mouseEvent) {
+                timer.cancel();
+                timer = new Timer();
+                context.setState(new EditState(context));
+                context.toEdit(textArea,90);
+                trigger = true;
+                Idletimer(90);
+            }
+        });
         textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 handler.toHandle(event);
+                if (time < 1){
+                    trigger = false;
+                }
+                if (trigger) {
+                    timer.cancel();
+                    timer = new Timer();
+                    Idletimer(90);
+                    context.toEdit(textArea, 90);
+                }
+
             }
         });
     }
@@ -504,7 +540,77 @@ public class HelloController {
         oViewFacade.init();
     }
 
-//    public void toggleButton(ActionEvent actionEvent) throws CloneNotSupportedException {
+    public void Idletimer(int t){
+        this.time = t;
+
+        TimerTask timerTask = new TimerTask() {
+            @Override
+            public void run() {
+                if (time >= 0) {
+                    System.out.println(time);
+                    time--;
+                } else {
+                    context.toEdit(textArea,time);
+                }
+            }
+        };
+        timer.scheduleAtFixedRate(timerTask,0,1000);
+    }
+
+    public TextArea getTextArea(){
+        return this.textArea;
+    }
+
+    public TextField getInputEmail(){
+        return this.inputEmail;
+    }
+
+    public Text getUseMeth(){
+        return this.useMeth;
+    }
+
+    public TextField getSearchKeyWord(){
+        return this.searchKeyWord;
+    }
+
+    public Text getResultNum(){
+        return this.resultNum;
+    }
+
+    public Text getTotalTextNum(){
+        return this.totalTextNum;
+    }
+
+    public Scene getScene() {
+        return this.scene;
+    }
+
+    public ComboBox getChooseWord(){
+        return this.chooseWord;
+    }
+
+    public Label getSendMailMsg() {
+        return this.sendMailMsg;
+    }
+
+    public Timer getTimer() {
+        return this.timer;
+    }
+
+    public void init(){
+        textArea.setEditable(true);
+        textArea.setText("");
+        textArea.setStyle("");
+        searchKeyWord.setText("");
+        inputEmail.setText("");
+        useMeth.setText("Doc Edit Mode");
+        resultNum.setText("0 Record");
+        chooseWord.getItems().clear();
+        sendMailMsg.setText("");
+        totalTextNum.setText("Total 0 Word");
+    }
+
+    //    public void toggleButton(ActionEvent actionEvent) throws CloneNotSupportedException {
 //        if (actionEvent.getSource() == buttonJake) {
 //            EmojiPrototype jakePro = emojis.getPrototype("Jake");
 //            textArea.setText(textArea.getText() + jakePro.getEmoji());

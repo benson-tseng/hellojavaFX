@@ -15,4 +15,8 @@ public class DeleteCommand implements Command{
         textEdit.deleteCmd();
     }
 
+    @Override
+    public String getType() {
+        return "edit";
+    }
 }

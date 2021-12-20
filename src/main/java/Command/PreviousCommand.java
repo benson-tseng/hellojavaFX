@@ -13,4 +13,9 @@ public class PreviousCommand implements Command{
     public void execute() {
         version.previous();
     }
+
+    @Override
+    public String getType() {
+        return "ver";
+    }
 }

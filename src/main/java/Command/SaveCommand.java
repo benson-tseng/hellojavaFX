@@ -13,4 +13,9 @@ public class SaveCommand implements Command{
     public void execute() {
         fileEdit.saveCmd();
     }
+
+    @Override
+    public String getType() {
+        return null;
+    }
 }

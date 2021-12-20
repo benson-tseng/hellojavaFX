@@ -15,6 +15,10 @@ public class OpenCommand implements Command{
         fileEdit.openCmd();
     }
 
+    @Override
+    public String getType() {
+        return null;
+    }
 }
 
 
