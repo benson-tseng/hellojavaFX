@@ -154,7 +154,7 @@ public class HelloController {
         m = originator.snapshot();
         caretaker.addMemento(m);
         context = new Context();
-        oViewFacade = new OViewFacade(textArea,searchKeyWord,inputEmail,useMeth,resultNum,totalTextNum,meth,scene,chooseWord,sendMailMsg,context,timer);
+        oViewFacade = new OViewFacade(this,meth,context);
         CreateMenu();
         handler = new BlueHandler (new BoldHandler(new GeneralHandler(null)));
         handler.setCmdInvoker(cmdInvoker);
@@ -557,7 +557,60 @@ public class HelloController {
         timer.scheduleAtFixedRate(timerTask,0,1000);
     }
 
-//    public void toggleButton(ActionEvent actionEvent) throws CloneNotSupportedException {
+    public TextArea getTextArea(){
+        return this.textArea;
+    }
+
+    public TextField getInputEmail(){
+        return this.inputEmail;
+    }
+
+    public Text getUseMeth(){
+        return this.useMeth;
+    }
+
+    public TextField getSearchKeyWord(){
+        return this.searchKeyWord;
+    }
+
+    public Text getResultNum(){
+        return this.resultNum;
+    }
+
+    public Text getTotalTextNum(){
+        return this.totalTextNum;
+    }
+
+    public Scene getScene() {
+        return this.scene;
+    }
+
+    public ComboBox getChooseWord(){
+        return this.chooseWord;
+    }
+
+    public Label getSendMailMsg() {
+        return this.sendMailMsg;
+    }
+
+    public Timer getTimer() {
+        return this.timer;
+    }
+
+    public void init(){
+        textArea.setEditable(true);
+        textArea.setText("");
+        textArea.setStyle("");
+        searchKeyWord.setText("");
+        inputEmail.setText("");
+        useMeth.setText("Doc Edit Mode");
+        resultNum.setText("0 Record");
+        chooseWord.getItems().clear();
+        sendMailMsg.setText("");
+        totalTextNum.setText("Total 0 Word");
+    }
+
+    //    public void toggleButton(ActionEvent actionEvent) throws CloneNotSupportedException {
 //        if (actionEvent.getSource() == buttonJake) {
 //            EmojiPrototype jakePro = emojis.getPrototype("Jake");
 //            textArea.setText(textArea.getText() + jakePro.getEmoji());
