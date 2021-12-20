@@ -27,18 +27,8 @@ public class OViewFacade {
         timer = new Timer();
         context.setState(new EditState(context));
         context.toEdit(helloController.getTextArea(), 90);
-        helloController.getTextArea().setEditable(true);
-        helloController.getTextArea().setText("");
-        helloController.getTextArea().setStyle("");
-        helloController.getSearchKeyWord().setText("");
-        helloController.getInputEmail().setText("");
         meth = new DocMeth();
         meth.editMeth(helloController.getScene(), helloController.getTextArea());
-        helloController.getUseMeth().setText("Doc Edit Mode");
-        helloController.getResultNum().setText("0 Record");
-        helloController.getChooseWord().getItems().clear();
-        helloController.getSendMailMsg().setText("");
-        helloController.getTotalTextNum().setText("Total 0 Word");
-
+        helloController.init();
     }
 }

@@ -15,4 +15,8 @@ public class SaveVersion implements Command {
         version.saveVersion();
     }
 
+    @Override
+    public String getType() {
+        return "ver";
+    }
 }

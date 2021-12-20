@@ -15,4 +15,8 @@ public class CopyCommand implements Command{
         textEdit.copyCmd();
     }
 
+    @Override
+    public String getType() {
+        return "edit";
+    }
 }

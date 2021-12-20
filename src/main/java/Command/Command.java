@@ -1,3 +1,3 @@
 package Command;
 
-public interface Command { void execute();}
+public interface Command { void execute();String getType();}

@@ -14,4 +14,9 @@ public class BoldCommand implements Command{
         fontStyle.setBold();
     }
 
+    @Override
+    public String getType() {
+        return "edit";
+    }
+
 }

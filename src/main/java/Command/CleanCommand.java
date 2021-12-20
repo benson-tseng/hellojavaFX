@@ -14,4 +14,8 @@ public class CleanCommand implements Command {
         fontStyle.cleanStyle();
     }
 
+    @Override
+    public String getType() {
+        return "edit";
+    }
 }

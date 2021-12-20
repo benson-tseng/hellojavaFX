@@ -13,4 +13,9 @@ public class PasteCommand implements Command{
     public void execute() {
         textEdit.pasteCmd();
     }
+
+    @Override
+    public String getType() {
+        return "edit";
+    }
 }
