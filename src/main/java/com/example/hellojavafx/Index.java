@@ -28,8 +28,11 @@ public class Index {
     @FXML
     private Label errmsg;
 
+    // proxy pattern
     public void login() throws IOException {
         errmsg.setText("");
+
+        // check if account & password have 4 to 8 digit
         if(acc.getText().length()<4 || acc.getText().length()>8){
             errmsg.setVisible(true);
             errmsg.setText("account must have 4 to 8 digit");
@@ -42,9 +45,27 @@ public class Index {
                 errmsg.setText("account, password must have 4 to 8 digit");
             }
         }
+
+        // if there's no error, then go to proxy pattern check whether the info is right
         if(errmsg.getText().equals("")){
             proxy.Scene pScene = new ProxyScene(acc.getText(),pass.getText());
-            pScene.navigate(stage,scene,errmsg);
+
+            // if realScene return true then construct the page, else pop up error msg
+            if(pScene.navigate()){
+                fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
+                scene = new javafx.scene.Scene(fxmlLoader.load());
+                stage.setTitle("Hello!");
+                stage.setScene(scene);
+                stage.show();
+                HelloController controller = fxmlLoader.getController();
+                controller.setScene(scene);
+                controller.setStage(stage);
+                controller.totalText();
+            }else{
+                errmsg.setVisible(true);
+                errmsg.setText("wrong acc or pass");
+            }
+
         }
     }
 

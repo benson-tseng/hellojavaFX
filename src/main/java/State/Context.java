@@ -25,19 +25,3 @@ public class Context {
 
 }
 
-//    public void Idletimer(){
-//        Timer timer = new Timer();
-//        TimerTask timerTask = new TimerTask() {
-//            @Override
-//            public void run() {
-//                if (t > 0) {
-//                    System.out.println(t);
-//                    t--;
-//                } else {
-//                    cState = readState;
-//
-//                }
-//            }
-//        };
-//        timer.scheduleAtFixedRate(timerTask,0,1000);
-//    }

@@ -58,12 +58,6 @@ public class HelloController {
     private IntSet intSet;
     private IContext iContext;
 
-    private Menu MFile;
-    private Menu MEditMethod;
-    private Menu MTextEdit;
-    private Menu MVersion;
-    private Menu MStyle;
-
     @FXML
     private Label sendMailMsg;
 
@@ -74,15 +68,6 @@ public class HelloController {
     private TextArea textArea;
 
     @FXML
-    private Button buttonJake;
-
-    @FXML
-    private Button buttonFinn;
-
-    @FXML
-    private Button buttonInit;
-
-    @FXML
     private Text useMeth,
             resultNum,
             totalTextNum;
@@ -90,16 +75,10 @@ public class HelloController {
     @FXML
     private ComboBox chooseWord;
 
-    // Position in TextArea;
-    private int curPosi;
-
     @FXML
     private MenuBar menuBar;
 
-    @FXML
-    private Label CurrentState;
-
-    // CommandInvoker use to invoke command;
+    // CommandInvoker used to invoke command;
     private CommandInvoker cmdInvoker;
 
     private FileEdit fileEdit;
@@ -127,19 +106,15 @@ public class HelloController {
 
     private Timer timer;
 
-    private EditState editState;
-    private ReadState readState;
-
     private EmojiPrototype finn;
     private EmojiPrototype jake;
-    private EmojiPrototype pika;
     private Emoji emojis;
 
     private KeyHandler handler;
 
     private OViewFacade oViewFacade;
 
-    public void initialize() throws NoSuchMethodException {
+    public void initialize() {
         trigger = true;
         timer = new Timer();
         textArea.setWrapText(true);
@@ -148,18 +123,37 @@ public class HelloController {
         resultNum.setFont(Font.font(null, FontWeight.LIGHT, 15));
         totalTextNum.setFont(Font.font(null, FontWeight.BLACK, 15));
         chooseWord.setVisibleRowCount(5);
+
+
+        //Command pattern, get Invoker from CommandInvoker
         cmdInvoker = CommandInvoker.getInstance();
+
+
+        //Memento pattern, new originator & caretaker then do snapshot
         originator = new Originator(textArea.getText());
         caretaker = new Caretaker();
         m = originator.snapshot();
         caretaker.addMemento(m);
         context = new Context();
-        oViewFacade = new OViewFacade(this,meth,context);
+
+
+        //Facade pattern, new OViewFacade
+        oViewFacade = new OViewFacade(this, meth, context);
+
+
         CreateMenu();
-        handler = new BlueHandler (new BoldHandler(new GeneralHandler(null)));
+
+
+        //ChainOfResponsibility pattern, new handler, set Invoker & Fontstyle to handler
+        handler = new BlueHandler(new BoldHandler(new GeneralHandler(null)));
         handler.setCmdInvoker(cmdInvoker);
         handler.setFontStyle(fontStyle);
+
+
         setListener();
+
+
+        //Prototype pattern, new EmojiPrototype, and setEmoji add to Prototype
         jake = new EmojiPrototype();
         jake.setEmoji("＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊＊\n" +
                 "　　　　　　　　　　　　　　　　　　　　　１１１１１１１１１１１１１１１１１１１１　　　　　　　　　　　　　　　　　　　　　　　　　　　　＊\n" +
@@ -249,22 +243,24 @@ public class HelloController {
         emojis.addPrototype("Finn", finn);
         emojis.addPrototype("Jake", jake);
 
+
+        //State pattern, set MouseEvent & KeyboardEvent if didn't type after 90s will lock textarea
         textArea.setOnMouseClicked(new EventHandler<MouseEvent>() {
             @Override
             public void handle(MouseEvent mouseEvent) {
                 timer.cancel();
                 timer = new Timer();
                 context.setState(new EditState(context));
-                context.toEdit(textArea,90);
+                context.toEdit(textArea, 5);
                 trigger = true;
-                Idletimer(90);
+                Idletimer(5);
             }
         });
         textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {
             @Override
             public void handle(KeyEvent event) {
                 handler.toHandle(event);
-                if (time < 1){
+                if (time < 1) {
                     trigger = false;
                 }
                 if (trigger) {
@@ -278,7 +274,6 @@ public class HelloController {
         });
     }
 
-    //Handle KeyEvent
 
 
     // create setTimeout func like js have
@@ -340,11 +335,11 @@ public class HelloController {
             menuBar.getMenus().add(tmpMenuBar.getMenus().get(i));
         }
 
-        MFile = menuBar.getMenus().get(0);
-        MEditMethod = menuBar.getMenus().get(1);
-        MTextEdit = menuBar.getMenus().get(2);
-        MVersion = menuBar.getMenus().get(3);
-        MStyle = menuBar.getMenus().get(4);
+        Menu MFile = menuBar.getMenus().get(0);
+        Menu MEditMethod = menuBar.getMenus().get(1);
+        Menu MTextEdit = menuBar.getMenus().get(2);
+        Menu MVersion = menuBar.getMenus().get(3);
+        Menu MStyle = menuBar.getMenus().get(4);
 
         MEditMethod.getItems().get(0).setOnAction(new EventHandler<ActionEvent>() {
             @Override
@@ -394,7 +389,7 @@ public class HelloController {
             public void changed(ObservableValue<? extends Number> observableValue, Number number, Number number2) {
                 // combo box default option is empty which index will be -1, it will cause the index out of bound error (ary[-1])
                 // so make the default option to 0
-                if(number2.toString().equals("-1")){
+                if (number2.toString().equals("-1")) {
                     number2 = 0;
                 }
                 if (searchKeyWord.getText().charAt(0) == '^' || searchKeyWord.getText().charAt(searchKeyWord.getLength() - 1) == '$') {
@@ -411,7 +406,10 @@ public class HelloController {
         if (this.searchKeyWord.getText() != "") {
             int countResult;
             // use regexp search
-            if (this.searchKeyWord.getText().charAt(0) == '^' && this.searchKeyWord.getText().substring(1, 2).matches("[a-zA-Z]") || this.searchKeyWord.getText().charAt(this.searchKeyWord.getLength() - 1) == '$' && this.searchKeyWord.getText().substring(this.searchKeyWord.getLength() - 2, this.searchKeyWord.getLength() - 1).matches("[a-zA-Z]")) {
+            if (this.searchKeyWord.getText().charAt(0) == '^' &&
+                    this.searchKeyWord.getText().substring(1, 2).matches("[a-zA-Z]") ||
+                    this.searchKeyWord.getText().charAt(this.searchKeyWord.getLength() - 1) == '$' &&
+                            this.searchKeyWord.getText().substring(this.searchKeyWord.getLength() - 2, this.searchKeyWord.getLength() - 1).matches("[a-zA-Z]")) {
                 iContext = new IContext(this.searchKeyWord.getText());
                 int tmpLength = 0;
                 for (int i = 0; i < this.textArea.getText().split(" ").length; i++) {
@@ -522,14 +520,14 @@ public class HelloController {
     }
 
     // Print Emoji Finn
-    public void PrintFinn(ActionEvent actionEvent) throws CloneNotSupportedException{
+    public void PrintFinn(ActionEvent actionEvent) throws CloneNotSupportedException {
         EmojiPrototype finnPro = emojis.getPrototype("Finn");
         textArea.setText(textArea.getText() + finnPro.getEmoji());
         System.out.println("finn");
     }
 
     // Print Emoji Finn
-    public void PrintJake(ActionEvent actionEvent) throws CloneNotSupportedException{
+    public void PrintJake(ActionEvent actionEvent) throws CloneNotSupportedException {
         EmojiPrototype jakePro = emojis.getPrototype("Jake");
         textArea.setText(textArea.getText() + jakePro.getEmoji());
         System.out.println("finn");
@@ -540,57 +538,37 @@ public class HelloController {
         oViewFacade.init();
     }
 
-    public void Idletimer(int t){
+
+    //State pattern, timer for counting idle time
+    public void Idletimer(int t) {
         this.time = t;
+        final String[] tmpMode = {useMeth.getText()};
 
         TimerTask timerTask = new TimerTask() {
             @Override
             public void run() {
                 if (time >= 0) {
+                    if(useMeth.getText().equals("Idle Mode")){
+                        useMeth.setText(tmpMode[0]);
+                    }
                     System.out.println(time);
                     time--;
                 } else {
-                    context.toEdit(textArea,time);
+                    tmpMode[0] =  useMeth.getText();
+                    useMeth.setText("Idle Mode");
+                    context.toEdit(textArea, time);
                 }
             }
         };
-        timer.scheduleAtFixedRate(timerTask,0,1000);
+        timer.scheduleAtFixedRate(timerTask, 0, 1000);
     }
 
-    public TextArea getTextArea(){
+    public TextArea getTextArea() {
         return this.textArea;
-    }
-
-    public TextField getInputEmail(){
-        return this.inputEmail;
-    }
-
-    public Text getUseMeth(){
-        return this.useMeth;
-    }
-
-    public TextField getSearchKeyWord(){
-        return this.searchKeyWord;
-    }
-
-    public Text getResultNum(){
-        return this.resultNum;
-    }
-
-    public Text getTotalTextNum(){
-        return this.totalTextNum;
     }
 
     public Scene getScene() {
         return this.scene;
-    }
-
-    public ComboBox getChooseWord(){
-        return this.chooseWord;
-    }
-
-    public Label getSendMailMsg() {
-        return this.sendMailMsg;
     }
 
     public Timer getTimer() {
@@ -598,7 +576,7 @@ public class HelloController {
     }
 
     // facade pattern
-    public void init(){
+    public void init() {
         textArea.setEditable(true);
         textArea.setText("");
         textArea.setStyle("");
