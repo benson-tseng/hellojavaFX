@@ -11,6 +11,7 @@ public class Context {
 
     private State state;
 
+    //Default state
     public Context() {
         state = new EditState(this);
     }
@@ -19,6 +20,7 @@ public class Context {
         this.state = state;
     }
 
+    //this will call which the state context is to do toEdit
     public void toEdit(TextArea textArea,int t){
         state.toEdit(textArea,t);
     }

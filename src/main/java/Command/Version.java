@@ -5,6 +5,7 @@ import Memento.Originator;
 import Memento.Caretaker;
 import javafx.scene.control.TextArea;
 
+//Receiver
 public class Version {
 
     private Originator originator;

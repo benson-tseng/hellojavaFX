@@ -9,6 +9,7 @@ import java.nio.file.Files;
 import java.util.concurrent.ExecutionException;
 import java.util.stream.Stream;
 
+//Receiver
 public class FileEdit {
 
     private TextArea textArea;

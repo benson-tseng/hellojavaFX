@@ -5,6 +5,7 @@ import decorator.Bold;
 import decorator.SimpleTextStyle;
 import javafx.scene.control.TextArea;
 
+//Receiver
 public class FontStyle {
 
     private TextArea textArea;

@@ -9,6 +9,7 @@ public class ReadState implements State{
         this.context = context;
     }
 
+    //If Idle time < 1  textarea will lock and can not edit, else context will change state to edit
     public void toEdit(TextArea textArea,int t){
         if (t < 1){
             textArea.setEditable(false);

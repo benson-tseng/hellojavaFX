@@ -16,6 +16,7 @@ public abstract class KeyHandler {
         this.kHandler = kHandler;
     }
 
+    //Whether the current handler can handle and not null,otherwise call NextHandler to handle
     public void toNext(KeyEvent event){
 
         if (kHandler != null){
@@ -24,6 +25,8 @@ public abstract class KeyHandler {
             kHandler.setFontStyle(fontStyle);
         }
     }
+
+    public abstract void toHandle(KeyEvent event);
 
     public void setCmdInvoker(CommandInvoker commandInvoker){
         this.commandInvoker = commandInvoker;
@@ -37,7 +40,7 @@ public abstract class KeyHandler {
 
     public FontStyle getFontStyle() {return this.fontStyle;}
 
-    public abstract void toHandle(KeyEvent event);
+
 
 
 }
