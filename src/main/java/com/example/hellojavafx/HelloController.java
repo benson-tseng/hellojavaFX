@@ -251,9 +251,9 @@ public class HelloController {
                 timer.cancel();
                 timer = new Timer();
                 context.setState(new EditState(context));
-                context.toEdit(textArea, 5);
+                context.toEdit(textArea, 90);
                 trigger = true;
-                Idletimer(5);
+                Idletimer(90);
             }
         });
         textArea.setOnKeyPressed(new EventHandler<KeyEvent>() {

@@ -34,11 +34,6 @@ public class CMenuItem implements Option{
                         commandInvoker.execute(open);
                         break;
 
-                    case "Delete":
-                        DeleteCommand del = new DeleteCommand(textEdit);
-                        commandInvoker.execute(del);
-                        break;
-
                     case "Copy":
                         CopyCommand copy = new CopyCommand(textEdit);
                         commandInvoker.execute(copy);

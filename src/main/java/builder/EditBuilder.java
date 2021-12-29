@@ -40,10 +40,8 @@ public class EditBuilder extends MenuBarBuilder{
         cMenu2.add(htmlEdit);
         cMenu2.setMenuItem();
         CMenu cMenu3 = new CMenu("TextEdit","TextEdit");
-        CMenuItem delete = new CMenuItem("Delete","Delete",fileEdit,textEdit,version,fontStyle,commandInvoker);
         CMenuItem copy = new CMenuItem("Copy","Copy",fileEdit,textEdit,version,fontStyle,commandInvoker);
         CMenuItem paste = new CMenuItem("Paste","Paste",fileEdit,textEdit,version,fontStyle,commandInvoker);
-        cMenu3.add(delete);
         cMenu3.add(copy);
         cMenu3.add(paste);
         cMenu3.setMenuItem();
