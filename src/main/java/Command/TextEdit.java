@@ -27,19 +27,6 @@ public class TextEdit {
         textArea.positionCaret(textArea.getCaretPosition()+textArea.getSelectedText().length());
     }
 
-    //Do Delete text
-    public void deleteCmd(){
-        int i = textArea.getCaretPosition();
-        tems = textArea.getText();
-        deleteIndex = textArea.getCaretPosition();
-        if (deleteIndex >= 0) {
-            textArea.setText(tems.substring(0,deleteIndex) +
-                    //Retain text before the deleted char
-                    tems.substring(deleteIndex+textArea.getSelectedText().length(),textArea.getLength()));
-        }
-        textArea.positionCaret(i);
-    }
-
     //Do Paste text
     public void pasteCmd(){
         int tmpCur = textArea.getCaretPosition();
