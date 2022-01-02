@@ -7,6 +7,7 @@ import javafx.scene.Scene;
 import javafx.scene.control.Label;
 import javafx.scene.control.PasswordField;
 import javafx.scene.control.TextField;
+import javafx.scene.paint.Paint;
 import javafx.stage.Stage;
 import proxy.ProxyScene;
 
@@ -29,29 +30,32 @@ public class Index {
     private Label errmsg;
 
     // proxy pattern
-    public void login() throws IOException {
+    public void login() throws IOException, InterruptedException {
         errmsg.setText("");
 
         // check if account & password have 4 to 8 digit
-        if(acc.getText().length()<4 || acc.getText().length()>8){
+        if (acc.getText().length() < 4 || acc.getText().length() > 8) {
             errmsg.setVisible(true);
             errmsg.setText("account must have 4 to 8 digit");
         }
-        if(pass.getText().length()<4 || pass.getText().length()>8){
-            if(errmsg.getText().equals("")){
+        if (pass.getText().length() < 4 || pass.getText().length() > 8) {
+            if (errmsg.getText().equals("")) {
                 errmsg.setVisible(true);
                 errmsg.setText("password must have 4 to 8 digit");
-            }else{
+            } else {
                 errmsg.setText("account, password must have 4 to 8 digit");
             }
         }
 
         // if there's no error, then go to proxy pattern check whether the info is right
-        if(errmsg.getText().equals("")){
-            proxy.Scene pScene = new ProxyScene(acc.getText(),pass.getText());
+        if (errmsg.getText().equals("")) {
+            proxy.Scene pScene = new ProxyScene(acc.getText(), pass.getText());
 
             // if realScene return true then construct the page, else pop up error msg
-            if(pScene.navigate()){
+            if (pScene.navigate()) {
+                errmsg.setText("login success!");
+                errmsg.setStyle("-fx-text-fill: green");
+                errmsg.setVisible(true);
                 fxmlLoader = new FXMLLoader(HelloApplication.class.getResource("hello-view.fxml"));
                 scene = new javafx.scene.Scene(fxmlLoader.load());
                 stage.setTitle("Hello!");
@@ -61,7 +65,7 @@ public class Index {
                 controller.setScene(scene);
                 controller.setStage(stage);
                 controller.totalText();
-            }else{
+            } else {
                 errmsg.setVisible(true);
                 errmsg.setText("wrong acc or pass");
             }
@@ -69,11 +73,11 @@ public class Index {
         }
     }
 
-    public void setScene(Scene scene){
+    public void setScene(Scene scene) {
         this.scene = scene;
     }
 
-    public void setStage(Stage stage){
+    public void setStage(Stage stage) {
         this.stage = stage;
     }
 }
