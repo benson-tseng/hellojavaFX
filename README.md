@@ -1,6 +1,6 @@
 <h1>NYUST Object Oriented Teamwork Project</h1>
 
-project goal: implement 16 design pattern in text editor
+project goal: implement 16 design pattern in text editor (Writer)
 1. singlton pattern (Benson)
 2. iterator pattern (Benson)
 3. composite pattern (Benson)
@@ -17,5 +17,7 @@ project goal: implement 16 design pattern in text editor
 14. memento pattern (Charlie)
 15. state pattern  (Charlie)
 16. facade pattern (Charlie)
+
+Design Pattern Code with Team 6 Group Member
 
 good luck for all the student struggling at the Jenny Huang's courses :D
