@@ -39,8 +39,4 @@ public abstract class KeyHandler {
     }
 
     public FontStyle getFontStyle() {return this.fontStyle;}
-
-
-
-
 }
